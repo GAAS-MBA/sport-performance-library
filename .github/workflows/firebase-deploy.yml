@@ -25,9 +25,16 @@ jobs:
       - name: Build
         run: cd app && npm run build
 
+      - name: Check Firebase token
+        run: |
+          if [ -z "${{ secrets.FIREBASE_TOKEN }}" ]; then
+            echo "::error::FIREBASE_TOKEN が GitHub Secrets に設定されていません。firebase login:ci でトークンを取得し、Settings > Secrets に登録してください。"
+            exit 1
+          fi
+
       - name: Deploy to Firebase Hosting
         uses: w9jds/firebase-action@v13.4.1
         with:
-          args: deploy --only hosting
+          args: deploy --only hosting --project sport-performance-library
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
