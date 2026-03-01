@@ -1,0 +1,8 @@
+{
+  "name": "sport-performance-library",
+  "private": true,
+  "scripts": {
+    "build": "cd app && npm run build",
+    "deploy": "npm run build && npx firebase-tools deploy --only hosting"
+  }
+}
