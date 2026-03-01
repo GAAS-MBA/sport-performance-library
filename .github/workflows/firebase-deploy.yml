@@ -1,3 +1,5 @@
+# 自動デプロイ設定開始
+# main ブランチへの push で https://sport-performance-library.web.app に自動デプロイ
 name: Deploy to Firebase Hosting
 
 on:
