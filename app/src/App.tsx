@@ -115,6 +115,7 @@ function App() {
   const [pageId, setPageId] = useState(SIDEBAR_ITEMS[0].id)
   const [rankingSortBy, setRankingSortBy] = useState<RankingSortBy>('rank')
   const [rankingSortDesc, setRankingSortDesc] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const currentItem = SIDEBAR_ITEMS.find((i) => i.id === pageId)!
 
   const isMarketRanking = pageId === 'market_ranking'
@@ -365,49 +366,100 @@ function App() {
       id === pageId ? 'bg-sky-100 text-sky-500' : ''
     }`
 
-  return (
-    <div className="flex min-h-screen flex-col sm:flex-row">
-      <aside className="w-full sm:w-60 flex-shrink-0 flex flex-col bg-white border-b sm:border-b-0 sm:border-r border-slate-200 pt-4 sm:pt-6 px-4 sm:px-0 pb-4 sm:pb-0">
-        <div className="px-3 sm:px-5 pb-3 sm:pb-4 border-b border-slate-200 mb-3">
-          <h2 className="text-[0.65rem] sm:text-xs font-semibold text-slate-500 uppercase tracking-wide m-0">市場規模ランキング</h2>
-        </div>
-        <nav className="flex flex-row flex-wrap gap-1.5 sm:flex-col sm:gap-0.5 px-2 sm:px-3 overflow-x-auto sm:overflow-visible">
-          {SIDEBAR_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              className={`${sidebarItemClass(item.id)} flex-1 sm:flex-none min-w-[80px] sm:min-w-0 py-2 sm:py-2.5 px-2 sm:px-4 text-xs sm:text-[0.9rem] shrink-0`}
-              onClick={() => setPageId(item.id)}
-            >
-              {item.type === 'market_ranking' ? (
-                <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-base font-normal rounded" title="一覧">≡</span>
-              ) : item.type === 'about' ? (
-                <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-base font-normal rounded" title="趣旨">ℹ</span>
-              ) : (
-                <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-[0.7rem] font-semibold text-sky-500 bg-sky-100 rounded-full">
-                  {item.marketSize}
+  const handleSidebarItemClick = (id: string) => {
+    setPageId(id)
+    setSidebarOpen(false)
+  }
+
+  const SidebarContent = () => (
+    <>
+      <div className="px-3 sm:px-5 pb-3 sm:pb-4 border-b border-slate-200 mb-3">
+        <h2 className="text-[0.65rem] sm:text-xs font-semibold text-slate-500 uppercase tracking-wide m-0">市場規模ランキング</h2>
+      </div>
+      <nav className="flex flex-col gap-0.5 px-2 sm:px-3 overflow-y-auto flex-1">
+        {SIDEBAR_ITEMS.map((item) => (
+          <button
+            key={item.id}
+            className={`${sidebarItemClass(item.id)} flex-none py-2.5 px-4 text-[0.9rem] w-full`}
+            onClick={() => handleSidebarItemClick(item.id)}
+          >
+            {item.type === 'market_ranking' ? (
+              <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-base font-normal rounded" title="一覧">≡</span>
+            ) : item.type === 'about' ? (
+              <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-base font-normal rounded" title="趣旨">ℹ</span>
+            ) : (
+              <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-[0.7rem] font-semibold text-sky-500 bg-sky-100 rounded-full">
+                {item.marketSize}
+              </span>
+            )}
+            <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+              <span className="font-medium">
+                {item.label}
+                {item.labelFull && <span className="block text-[0.65rem] font-normal text-slate-500 mt-0.5">{item.labelFull}</span>}
+              </span>
+              {item.type !== 'market_ranking' && item.type !== 'about' && (
+                <span className={`text-[0.7rem] font-normal opacity-90 ${item.id === pageId ? 'text-sky-500' : 'text-slate-500'}`}>
+                  競技 {item.population} · 観戦 {item.spectatorPopulation} · {item.marketSizeUsd}
                 </span>
               )}
-              <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                <span className="font-medium">
-                  {item.label}
-                  {item.labelFull && <span className="block text-[0.65rem] font-normal text-slate-500 mt-0.5">{item.labelFull}</span>}
-                </span>
-                {item.type !== 'market_ranking' && item.type !== 'about' && (
-                  <span className={`text-[0.7rem] font-normal opacity-90 ${item.id === pageId ? 'text-sky-500' : 'text-slate-500'}`}>
-                    競技 {item.population} · 観戦 {item.spectatorPopulation} · {item.marketSizeUsd}
-                  </span>
-                )}
-              </div>
-            </button>
-          ))}
-        </nav>
-        <footer className="mt-auto pt-3 sm:pt-4 px-3 sm:px-5 border-t border-slate-200 text-[0.65rem] sm:text-xs text-slate-500">© TANAAKK</footer>
+            </div>
+          </button>
+        ))}
+      </nav>
+      <footer className="pt-3 sm:pt-4 px-3 sm:px-5 border-t border-slate-200 text-[0.65rem] sm:text-xs text-slate-500 shrink-0">© TANAAKK</footer>
+    </>
+  )
+
+  return (
+    <div className="flex min-h-screen flex-col sm:flex-row">
+      {/* モバイル: オーバーレイ */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 sm:hidden"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={`
+          fixed sm:static inset-y-0 left-0 z-50 w-[280px] sm:w-60 flex-shrink-0 flex flex-col bg-white border-r border-slate-200 pt-4 sm:pt-6 px-4 sm:px-0 pb-4 sm:pb-0
+          transition-transform duration-300 ease-out
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0
+        `}
+      >
+        <div className="sm:hidden flex items-center justify-between mb-3 pb-3 border-b border-slate-200">
+          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wide m-0">メニュー</h2>
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(false)}
+            className="p-2 -m-2 rounded-lg hover:bg-slate-100 text-slate-500"
+            aria-label="メニューを閉じる"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <SidebarContent />
       </aside>
 
       <main className="flex-1 min-w-0 w-full max-w-[720px] py-4 px-4 sm:py-8 sm:px-6 mx-auto">
-        <header className="text-center mb-6 sm:mb-10">
-          <h1 className="text-xl sm:text-[1.75rem] font-bold text-slate-800 m-0 mb-1 tracking-tight">Sport Performance Library</h1>
-          <p className="text-sm sm:text-[0.95rem] text-slate-500 m-0">スポーツパフォーマンス 個別最適化データ</p>
+        <header className="flex items-center gap-3 mb-6 sm:mb-10">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="sm:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 text-slate-600 flex-shrink-0"
+            aria-label="メニューを開く"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div className="flex-1 text-center sm:text-center min-w-0">
+            <h1 className="text-xl sm:text-[1.75rem] font-bold text-slate-800 m-0 mb-1 tracking-tight">Sport Performance Library</h1>
+            <p className="text-sm sm:text-[0.95rem] text-slate-500 m-0">スポーツパフォーマンス 個別最適化データ</p>
+          </div>
+          <div className="sm:hidden w-10 shrink-0" aria-hidden="true" />
         </header>
 
         <div>{renderContent()}</div>
