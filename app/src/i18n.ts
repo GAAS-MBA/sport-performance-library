@@ -209,3 +209,32 @@ export function getCountLabelDisplay(lang: Lang, countLabel: string): string {
   if (key) return t(lang, key)
   return countLabel
 }
+
+/** populationNum: 百万人, spectatorNum: 百万人, marketSizeNum: 10億ドル */
+function fmtPop(lang: Lang, num: number): string {
+  if (lang === 'en') {
+    if (num >= 1000) return (num / 1000).toFixed(num % 1000 === 0 ? 0 : 1) + 'B'
+    if (num >= 1) return (num % 1 === 0 ? num.toString() : num.toFixed(1)) + 'M'
+    if (num >= 0.001) return Math.round(num * 1000) + 'K'
+    return Math.round(num * 1e6).toLocaleString()
+  }
+  if (num >= 100) return (num / 100).toFixed(num % 100 === 0 ? 0 : 1) + '億人'
+  if (num >= 1) return (num * 100).toLocaleString() + '万人'
+  if (num >= 0.01) return Math.round(num * 100) + '万人'
+  return (num * 1e6).toLocaleString() + '人'
+}
+
+export function formatPopulation(lang: Lang, num: number): string {
+  if (num === 0) return lang === 'en' ? '—' : '—'
+  return fmtPop(lang, num)
+}
+
+export function formatSpectator(lang: Lang, num: number): string {
+  if (num === 0) return lang === 'en' ? '—' : '—'
+  return fmtPop(lang, num)
+}
+
+export function formatMarketSize(_lang: Lang, num: number): string {
+  if (num === 0) return '—'
+  return '$' + (num % 1 === 0 ? num.toString() : num.toFixed(1)) + 'B'
+}

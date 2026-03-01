@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { t, type Lang } from './i18n'
+import { t, formatPopulation, formatSpectator, formatMarketSize, type Lang } from './i18n'
 import { SPORTS, getTop10 } from './data/sports'
 import { SIDEBAR_ITEMS } from './data/pages'
 import { TENNIS_TOP10 } from './data/tennis'
@@ -275,9 +275,9 @@ function App() {
                     {lang === 'en' && item.labelEn ? item.labelEn : item.label}
                     {item.labelFull && <span className="block text-[0.65rem] sm:text-[0.7rem] font-normal text-slate-500 mt-0.5">{item.labelFull}</span>}
                   </span>
-                  <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{item.population}</span>
-                  <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{item.spectatorPopulation}</span>
-                  <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{item.marketSizeUsd}</span>
+                  <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{formatPopulation(lang, item.populationNum)}</span>
+                  <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{formatSpectator(lang, item.spectatorNum)}</span>
+                  <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{formatMarketSize(lang, item.marketSizeNum)}</span>
                 </button>
               ))}
             </div>
@@ -604,7 +604,7 @@ function App() {
               </span>
               {item.type !== 'market_ranking' && item.type !== 'about' && (
                 <span className={`text-[0.7rem] font-normal opacity-90 ${item.id === pageId ? 'text-sky-500' : 'text-slate-500'}`}>
-                  {t(lang, 'participation')} {item.population} · {t(lang, 'spectator')} {item.spectatorPopulation} · {item.marketSizeUsd}
+                  {t(lang, 'participation')} {formatPopulation(lang, item.populationNum)} · {t(lang, 'spectator')} {formatSpectator(lang, item.spectatorNum)} · {formatMarketSize(lang, item.marketSizeNum)}
                 </span>
               )}
             </div>
