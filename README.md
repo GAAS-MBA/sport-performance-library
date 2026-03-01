@@ -6,8 +6,23 @@
 
 `app/` に React + TypeScript + Vite の Web アプリがあります。各スポーツの Top 10 をブラウザで閲覧できます。
 
+- **本番**: https://sport-performance-library.web.app/
+
 ```bash
 cd app && npm install && npm run dev
+```
+
+### Firebase 自動デプロイ
+
+`main` ブランチへの push で [Firebase Hosting](https://sport-performance-library.web.app/) に自動デプロイされます。
+
+**初回セットアップ**: GitHub リポジトリの Settings → Secrets and variables → Actions に `FIREBASE_TOKEN` を追加してください。
+
+```bash
+# トークン取得（要 firebase-tools）
+npm i -g firebase-tools
+firebase login:ci
+# 表示されたトークンを GitHub Secrets に登録
 ```
 
 ## 構成
