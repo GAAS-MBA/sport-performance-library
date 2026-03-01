@@ -8,6 +8,10 @@ export interface AthleteRecord {
   discipline?: string
   mvpCount?: number
   birthDate?: string  // YYYY-MM-DD
+  /** 生涯得点数（NBAレギュラーシーズン） */
+  careerPoints?: number
+  /** 生涯出場試合数（得点の算定前提） */
+  careerGames?: number
 }
 
 export interface TennisRecord {
@@ -65,7 +69,7 @@ export interface SportConfig {
   minCount: number
   countLabel: string
   records: AthleteRecord[]
-  countKey: 'count' | 'mvpCount'
+  countKey: 'count' | 'mvpCount' | 'careerPoints'
   marketSize?: number  // 市場規模順（1=最大）
 }
 

@@ -6,6 +6,13 @@ import { getBoxingTop10, getWeightClassLabel } from './data/boxing'
 import { getSoccerTop10 } from './data/soccer'
 import { GOLF_MAJORS_TOP10 } from './data/golf'
 import { BASEBALL_MVP_TOP10, BASEBALL_CY_YOUNG_TOP10 } from './data/baseball'
+import { HORSE_RACING_TOP10 } from './data/horseRacing'
+import { CRICKET_TOP10 } from './data/cricket'
+import { NFL_MVP_TOP10 } from './data/nfl'
+import { F1_TOP10 } from './data/f1'
+import { ESPORTS_TOP10 } from './data/esports'
+import { MMA_TOP10 } from './data/mma'
+import { RUGBY_TOP10 } from './data/rugby'
 import type { AthleteRecord, TennisRecord, BoxingRecord, SoccerRecord } from './types'
 
 function formatBirthDate(d?: string): string {
@@ -46,8 +53,17 @@ function AthleteCard({
         </div>
       </div>
       <div className="flex-shrink-0 text-left sm:text-right border-t border-slate-100 pt-3 sm:border-0 sm:pt-0">
-        <div className="text-base sm:text-lg font-bold text-sky-500">{countValue}{['MVP', 'メジャー', 'Cy Young'].includes(countLabel) ? '回' : '個'}</div>
+        <div className="text-base sm:text-lg font-bold text-sky-500">
+          {countLabel === '得点'
+            ? `${countValue.toLocaleString()}得点`
+            : `${countValue}${['MVP', 'メジャー', 'Cy Young', 'G1勝利', 'WDC', '防衛', 'W杯優勝', '世界大会優勝'].includes(countLabel) ? '回' : '個'}`}
+        </div>
         <div className="text-xs sm:text-sm text-slate-500">{athlete.years}</div>
+        {countLabel === '得点' && athlete.careerGames != null && (
+          <div className="text-xs text-slate-500 mt-0.5">
+            {athlete.careerGames.toLocaleString()}試合・{(countValue / athlete.careerGames).toFixed(1)}点/試合
+          </div>
+        )}
         <div className="text-xs text-slate-500 mt-0.5">{athlete.country}</div>
       </div>
     </div>
@@ -197,6 +213,13 @@ function App() {
   const golfRecords = pageId === 'golf' ? GOLF_MAJORS_TOP10 : []
   const baseballMvp = pageId === 'baseball' ? BASEBALL_MVP_TOP10 : []
   const baseballCyYoung = pageId === 'baseball' ? BASEBALL_CY_YOUNG_TOP10 : []
+  const horseRacingRecords = pageId === 'horse_racing' ? HORSE_RACING_TOP10 : []
+  const cricketRecords = pageId === 'cricket' ? CRICKET_TOP10 : []
+  const nflRecords = pageId === 'nfl' ? NFL_MVP_TOP10 : []
+  const f1Records = pageId === 'f1' ? F1_TOP10 : []
+  const esportsRecords = pageId === 'esports' ? ESPORTS_TOP10 : []
+  const mmaRecords = pageId === 'mma' ? MMA_TOP10 : []
+  const rugbyRecords = pageId === 'rugby' ? RUGBY_TOP10 : []
 
   const colSortClass = (col: RankingSortBy) =>
     `flex items-center gap-1 p-0 font-semibold text-slate-500 uppercase tracking-wide bg-transparent border-none cursor-pointer text-left transition-colors hover:text-sky-500 ${
@@ -420,6 +443,104 @@ function App() {
         </>
       )
     }
+    if (pageId === 'horse_racing') {
+      return (
+        <>
+          <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
+            騎手 G1 勝利数 Top 10
+          </span>
+          <div className="flex flex-col gap-2">
+            {horseRacingRecords.map((r, i) => (
+              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="G1勝利" countValue={r.count ?? 0} />
+            ))}
+          </div>
+        </>
+      )
+    }
+    if (pageId === 'cricket') {
+      return (
+        <>
+          <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
+            テストマッチ センチュリー（100点）達成数 Top 10
+          </span>
+          <div className="flex flex-col gap-2">
+            {cricketRecords.map((r, i) => (
+              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="センチュリー" countValue={r.count ?? 0} />
+            ))}
+          </div>
+        </>
+      )
+    }
+    if (pageId === 'nfl') {
+      return (
+        <>
+          <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
+            NFL MVP 獲得者 Top 10
+          </span>
+          <div className="flex flex-col gap-2">
+            {nflRecords.map((r, i) => (
+              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="MVP" countValue={r.count ?? 0} />
+            ))}
+          </div>
+        </>
+      )
+    }
+    if (pageId === 'f1') {
+      return (
+        <>
+          <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
+            F1 ワールドチャンピオン 3回以上
+          </span>
+          <div className="flex flex-col gap-2">
+            {f1Records.map((r, i) => (
+              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="WDC" countValue={r.count ?? 0} />
+            ))}
+          </div>
+        </>
+      )
+    }
+    if (pageId === 'esports') {
+      return (
+        <>
+          <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
+            eスポーツ 世界大会優勝 Top 10
+          </span>
+          <div className="flex flex-col gap-2">
+            {esportsRecords.map((r, i) => (
+              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="世界大会優勝" countValue={r.count ?? 0} />
+            ))}
+          </div>
+        </>
+      )
+    }
+    if (pageId === 'mma') {
+      return (
+        <>
+          <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
+            UFC 王座防衛 3回以上
+          </span>
+          <div className="flex flex-col gap-2">
+            {mmaRecords.map((r, i) => (
+              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="防衛" countValue={r.count ?? 0} />
+            ))}
+          </div>
+        </>
+      )
+    }
+    if (pageId === 'rugby') {
+      return (
+        <>
+          <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
+            ラグビーワールドカップ優勝・キャップ数 Top 10
+          </span>
+          <div className="flex flex-col gap-2">
+            {rugbyRecords.map((r, i) => (
+              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="W杯優勝" countValue={r.count ?? 0} />
+            ))}
+          </div>
+        </>
+      )
+    }
     const s = sport!
     return (
       <>
@@ -433,7 +554,7 @@ function App() {
               rank={i + 1}
               athlete={a}
               countLabel={s.countLabel}
-              countValue={s.countKey === 'mvpCount' ? (a.mvpCount ?? 0) : (a.count ?? 0)}
+              countValue={s.countKey === 'mvpCount' ? (a.mvpCount ?? 0) : s.countKey === 'careerPoints' ? (a.careerPoints ?? 0) : (a.count ?? 0)}
             />
           ))}
         </div>

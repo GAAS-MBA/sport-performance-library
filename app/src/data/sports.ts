@@ -1,16 +1,17 @@
 import type { AthleteRecord, SportConfig } from '../types'
 
+// NBA 生涯得点 Top 10（レギュラーシーズンのみ）
 const basketball: AthleteRecord[] = [
-  { name: 'Kareem Abdul-Jabbar', nameOrigin: 'Kareem Abdul-Jabbar', mvpCount: 6, years: '1971-1980', country: 'USA', birthDate: '1947-04-16' },
-  { name: 'Michael Jordan', nameOrigin: 'Michael Jordan', mvpCount: 5, years: '1988-1998', country: 'USA', birthDate: '1963-02-17' },
-  { name: 'Bill Russell', nameOrigin: 'William Felton Russell', mvpCount: 5, years: '1958-1965', country: 'USA', birthDate: '1934-02-12' },
-  { name: 'Wilt Chamberlain', nameOrigin: 'Wilton Norman Chamberlain', mvpCount: 4, years: '1960-1968', country: 'USA', birthDate: '1936-08-21' },
-  { name: 'LeBron James', nameOrigin: 'LeBron Raymone James Sr.', mvpCount: 4, years: '2009-2013', country: 'USA', birthDate: '1984-12-30' },
-  { name: 'Larry Bird', nameOrigin: 'Larry Joe Bird', mvpCount: 3, years: '1984-1986', country: 'USA', birthDate: '1956-12-07' },
-  { name: 'Magic Johnson', nameOrigin: 'Earvin Johnson Jr.', mvpCount: 3, years: '1987-1990', country: 'USA', birthDate: '1959-08-14' },
-  { name: 'Moses Malone', nameOrigin: 'Moses Eugene Malone', mvpCount: 3, years: '1979-1983', country: 'USA', birthDate: '1955-03-23' },
-  { name: 'Nikola Jokić', nameOrigin: 'Nikola Jokić', mvpCount: 3, years: '2021-2024', country: 'Serbia', birthDate: '1995-02-19' },
-  { name: 'Bob Pettit', nameOrigin: 'Robert Lee Pettit Jr.', mvpCount: 2, years: '1956-1959', country: 'USA', birthDate: '1932-12-12' },
+  { name: 'LeBron James', nameOrigin: 'LeBron Raymone James Sr.', careerPoints: 43066, careerGames: 1603, years: '2003-2024', country: 'USA', birthDate: '1984-12-30' },
+  { name: 'Kareem Abdul-Jabbar', nameOrigin: 'Kareem Abdul-Jabbar', careerPoints: 38387, careerGames: 1560, years: '1969-1989', country: 'USA', birthDate: '1947-04-16' },
+  { name: 'Karl Malone', nameOrigin: 'Karl Anthony Malone', careerPoints: 36928, careerGames: 1476, years: '1985-2004', country: 'USA', birthDate: '1963-07-24' },
+  { name: 'Kobe Bryant', nameOrigin: 'Kobe Bean Bryant', careerPoints: 33643, careerGames: 1346, years: '1996-2016', country: 'USA', birthDate: '1978-08-23' },
+  { name: 'Michael Jordan', nameOrigin: 'Michael Jordan', careerPoints: 32292, careerGames: 1072, years: '1984-2003', country: 'USA', birthDate: '1963-02-17' },
+  { name: 'Kevin Durant', nameOrigin: 'Kevin Wayne Durant', careerPoints: 32038, careerGames: 1179, years: '2007-2024', country: 'USA', birthDate: '1988-09-29' },
+  { name: 'Dirk Nowitzki', nameOrigin: 'Dirk Werner Nowitzki', careerPoints: 31560, careerGames: 1522, years: '1998-2019', country: 'Germany', birthDate: '1978-06-19' },
+  { name: 'Wilt Chamberlain', nameOrigin: 'Wilton Norman Chamberlain', careerPoints: 31419, careerGames: 1045, years: '1959-1973', country: 'USA', birthDate: '1936-08-21' },
+  { name: 'James Harden', nameOrigin: 'James Edward Harden Jr.', careerPoints: 28937, careerGames: 1202, years: '2009-2024', country: 'USA', birthDate: '1989-08-26' },
+  { name: 'Shaquille O\'Neal', nameOrigin: 'Shaquille Rashaun O\'Neal', careerPoints: 28596, careerGames: 1207, years: '1992-2011', country: 'USA', birthDate: '1972-03-06' },
 ]
 
 const swimming: AthleteRecord[] = [
@@ -88,7 +89,7 @@ const tableTennis: AthleteRecord[] = [
 
 // 市場規模順（1=最大）
 const SPORTS_RAW: SportConfig[] = [
-  { id: 'basketball', label: 'バスケットボール', labelEn: 'Basketball', rule: 'NBA MVP 2回以上獲得', minCount: 2, countLabel: 'MVP', countKey: 'mvpCount', records: basketball, marketSize: 3 },
+  { id: 'basketball', label: 'バスケットボール', labelEn: 'Basketball', rule: '生涯得点 Top 10（NBAレギュラーシーズン）', minCount: 20000, countLabel: '得点', countKey: 'careerPoints', records: basketball, marketSize: 3 },
   { id: 'swimming', label: '水泳', labelEn: 'Swimming', rule: 'オリンピック金メダル 3個以上', minCount: 3, countLabel: '金メダル', countKey: 'count', records: swimming, marketSize: 8 },
   { id: 'sprint', label: '短距離走', labelEn: 'Sprint', rule: '100m/200m/4x100m 金メダル 3個以上', minCount: 3, countLabel: '金メダル', countKey: 'count', records: sprint, marketSize: 9 },
   { id: 'long_distance', label: '長距離走', labelEn: 'Long Distance', rule: '5000m/10000m/マラソン 金メダル 3個以上', minCount: 3, countLabel: '金メダル', countKey: 'count', records: longDistance, marketSize: 10 },
@@ -109,24 +110,27 @@ export function getTop10(
   const threshold = options?.minCount ?? sport.minCount
   const gender = options?.gender?.toUpperCase()
 
-  let filtered = sport.records.filter((r) => {
-    const c = sport.countKey === 'mvpCount' ? (r.mvpCount ?? 0) : (r.count ?? 0)
-    return c >= threshold
-  })
+  const getVal = (r: AthleteRecord) => {
+    if (sport.countKey === 'mvpCount') return r.mvpCount ?? 0
+    if (sport.countKey === 'careerPoints') return r.careerPoints ?? 0
+    return r.count ?? 0
+  }
+
+  let filtered = sport.records.filter((r) => getVal(r) >= threshold)
 
   if (gender) {
     filtered = filtered.filter((r) => r.gender === gender)
   }
 
   filtered.sort((a, b) => {
-    const ca = sport.countKey === 'mvpCount' ? (a.mvpCount ?? 0) : (a.count ?? 0)
-    const cb = sport.countKey === 'mvpCount' ? (b.mvpCount ?? 0) : (b.count ?? 0)
+    const ca = getVal(a)
+    const cb = getVal(b)
     if (cb !== ca) return cb - ca
     return (a.years || '').localeCompare(b.years || '')
   })
 
   // 10位と同列の選手は全員含める
-  const getCount = (r: AthleteRecord) => (sport.countKey === 'mvpCount' ? (r.mvpCount ?? 0) : (r.count ?? 0))
+  const getCount = getVal
   const tenth = filtered[9]
   if (!tenth) return filtered
   const minCount = getCount(tenth)
