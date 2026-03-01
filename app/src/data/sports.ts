@@ -1,89 +1,89 @@
 import type { AthleteRecord, SportConfig } from '../types'
 
 const basketball: AthleteRecord[] = [
-  { name: 'Kareem Abdul-Jabbar', nameOrigin: 'Kareem Abdul-Jabbar', mvpCount: 6, years: '1971-1980', country: 'USA' },
-  { name: 'Michael Jordan', nameOrigin: 'Michael Jordan', mvpCount: 5, years: '1988-1998', country: 'USA' },
-  { name: 'Bill Russell', nameOrigin: 'William Felton Russell', mvpCount: 5, years: '1958-1965', country: 'USA' },
-  { name: 'Wilt Chamberlain', nameOrigin: 'Wilton Norman Chamberlain', mvpCount: 4, years: '1960-1968', country: 'USA' },
-  { name: 'LeBron James', nameOrigin: 'LeBron Raymone James Sr.', mvpCount: 4, years: '2009-2013', country: 'USA' },
-  { name: 'Larry Bird', nameOrigin: 'Larry Joe Bird', mvpCount: 3, years: '1984-1986', country: 'USA' },
-  { name: 'Magic Johnson', nameOrigin: 'Earvin Johnson Jr.', mvpCount: 3, years: '1987-1990', country: 'USA' },
-  { name: 'Moses Malone', nameOrigin: 'Moses Eugene Malone', mvpCount: 3, years: '1979-1983', country: 'USA' },
-  { name: 'Nikola Jokić', nameOrigin: 'Nikola Jokić', mvpCount: 3, years: '2021-2024', country: 'Serbia' },
-  { name: 'Bob Pettit', nameOrigin: 'Robert Lee Pettit Jr.', mvpCount: 2, years: '1956-1959', country: 'USA' },
+  { name: 'Kareem Abdul-Jabbar', nameOrigin: 'Kareem Abdul-Jabbar', mvpCount: 6, years: '1971-1980', country: 'USA', birthDate: '1947-04-16' },
+  { name: 'Michael Jordan', nameOrigin: 'Michael Jordan', mvpCount: 5, years: '1988-1998', country: 'USA', birthDate: '1963-02-17' },
+  { name: 'Bill Russell', nameOrigin: 'William Felton Russell', mvpCount: 5, years: '1958-1965', country: 'USA', birthDate: '1934-02-12' },
+  { name: 'Wilt Chamberlain', nameOrigin: 'Wilton Norman Chamberlain', mvpCount: 4, years: '1960-1968', country: 'USA', birthDate: '1936-08-21' },
+  { name: 'LeBron James', nameOrigin: 'LeBron Raymone James Sr.', mvpCount: 4, years: '2009-2013', country: 'USA', birthDate: '1984-12-30' },
+  { name: 'Larry Bird', nameOrigin: 'Larry Joe Bird', mvpCount: 3, years: '1984-1986', country: 'USA', birthDate: '1956-12-07' },
+  { name: 'Magic Johnson', nameOrigin: 'Earvin Johnson Jr.', mvpCount: 3, years: '1987-1990', country: 'USA', birthDate: '1959-08-14' },
+  { name: 'Moses Malone', nameOrigin: 'Moses Eugene Malone', mvpCount: 3, years: '1979-1983', country: 'USA', birthDate: '1955-03-23' },
+  { name: 'Nikola Jokić', nameOrigin: 'Nikola Jokić', mvpCount: 3, years: '2021-2024', country: 'Serbia', birthDate: '1995-02-19' },
+  { name: 'Bob Pettit', nameOrigin: 'Robert Lee Pettit Jr.', mvpCount: 2, years: '1956-1959', country: 'USA', birthDate: '1932-12-12' },
 ]
 
 const swimming: AthleteRecord[] = [
-  { name: 'Michael Phelps', nameOrigin: 'Michael Fred Phelps II', count: 23, years: '2004-2016', country: 'USA', gender: 'M' },
-  { name: 'Katie Ledecky', nameOrigin: 'Kathleen Genevieve Ledecky', count: 9, years: '2012-2024', country: 'USA', gender: 'F' },
-  { name: 'Mark Spitz', nameOrigin: 'Mark Andrew Spitz', count: 9, years: '1968-1972', country: 'USA', gender: 'M' },
-  { name: 'Caeleb Dressel', nameOrigin: 'Caeleb Remel Dressel', count: 9, years: '2016-2024', country: 'USA', gender: 'M' },
-  { name: 'Jenny Thompson', nameOrigin: 'Jennifer Beth Thompson', count: 8, years: '1992-2004', country: 'USA', gender: 'F' },
-  { name: 'Matt Biondi', nameOrigin: 'Matthew Nicholas Biondi', count: 8, years: '1984-1992', country: 'USA', gender: 'M' },
-  { name: 'Emma McKeon', nameOrigin: 'Emma McKeon', count: 6, years: '2016-2024', country: 'Australia', gender: 'F' },
-  { name: 'Kristin Otto', nameOrigin: 'Kristin Otto', count: 6, years: '1988', country: 'East Germany', gender: 'F' },
-  { name: 'Amy Van Dyken', nameOrigin: 'Amy Van Dyken', count: 6, years: '1996-2000', country: 'USA', gender: 'F' },
-  { name: 'Ryan Lochte', nameOrigin: 'Ryan Steven Lochte', count: 6, years: '2004-2016', country: 'USA', gender: 'M' },
+  { name: 'Michael Phelps', nameOrigin: 'Michael Fred Phelps II', count: 23, years: '2004-2016', country: 'USA', gender: 'M', birthDate: '1985-06-30' },
+  { name: 'Katie Ledecky', nameOrigin: 'Kathleen Genevieve Ledecky', count: 9, years: '2012-2024', country: 'USA', gender: 'F', birthDate: '1997-03-17' },
+  { name: 'Mark Spitz', nameOrigin: 'Mark Andrew Spitz', count: 9, years: '1968-1972', country: 'USA', gender: 'M', birthDate: '1950-02-10' },
+  { name: 'Caeleb Dressel', nameOrigin: 'Caeleb Remel Dressel', count: 9, years: '2016-2024', country: 'USA', gender: 'M', birthDate: '1996-08-16' },
+  { name: 'Jenny Thompson', nameOrigin: 'Jennifer Beth Thompson', count: 8, years: '1992-2004', country: 'USA', gender: 'F', birthDate: '1973-02-26' },
+  { name: 'Matt Biondi', nameOrigin: 'Matthew Nicholas Biondi', count: 8, years: '1984-1992', country: 'USA', gender: 'M', birthDate: '1965-10-08' },
+  { name: 'Emma McKeon', nameOrigin: 'Emma McKeon', count: 6, years: '2016-2024', country: 'Australia', gender: 'F', birthDate: '1994-05-24' },
+  { name: 'Kristin Otto', nameOrigin: 'Kristin Otto', count: 6, years: '1988', country: 'East Germany', gender: 'F', birthDate: '1966-02-07' },
+  { name: 'Amy Van Dyken', nameOrigin: 'Amy Van Dyken', count: 6, years: '1996-2000', country: 'USA', gender: 'F', birthDate: '1973-02-15' },
+  { name: 'Ryan Lochte', nameOrigin: 'Ryan Steven Lochte', count: 6, years: '2004-2016', country: 'USA', gender: 'M', birthDate: '1984-08-03' },
 ]
 
 const sprint: AthleteRecord[] = [
-  { name: 'Usain Bolt', nameOrigin: 'Usain St. Leo Bolt', count: 8, years: '2008-2016', country: 'Jamaica', gender: 'M' },
-  { name: 'Carl Lewis', nameOrigin: 'Frederick Carlton Lewis', count: 6, years: '1984-1996', country: 'USA', gender: 'M' },
-  { name: 'Elaine Thompson-Herah', nameOrigin: 'Elaine Thompson-Herah', count: 5, years: '2016-2024', country: 'Jamaica', gender: 'F' },
-  { name: 'Maurice Greene', nameOrigin: 'Maurice Greene', count: 4, years: '2000-2004', country: 'USA', gender: 'M' },
-  { name: 'Shelly-Ann Fraser-Pryce', nameOrigin: 'Shelly-Ann Fraser-Pryce', count: 4, years: '2008-2024', country: 'Jamaica', gender: 'F' },
-  { name: 'Jesse Owens', nameOrigin: 'James Cleveland Owens', count: 3, years: '1936', country: 'USA', gender: 'M' },
-  { name: 'Florence Griffith Joyner', nameOrigin: 'Florence Delorez Griffith', count: 3, years: '1988', country: 'USA', gender: 'F' },
-  { name: 'Valerie Brisco-Hooks', nameOrigin: 'Valerie Ann Brisco-Hooks', count: 3, years: '1984', country: 'USA', gender: 'F' },
-  { name: 'Wilma Rudolph', nameOrigin: 'Wilma Glodean Rudolph', count: 3, years: '1960', country: 'USA', gender: 'F' },
-  { name: 'Betty Cuthbert', nameOrigin: 'Elizabeth Cuthbert', count: 3, years: '1956', country: 'Australia', gender: 'F' },
+  { name: 'Usain Bolt', nameOrigin: 'Usain St. Leo Bolt', count: 8, years: '2008-2016', country: 'Jamaica', gender: 'M', birthDate: '1986-08-21' },
+  { name: 'Carl Lewis', nameOrigin: 'Frederick Carlton Lewis', count: 6, years: '1984-1996', country: 'USA', gender: 'M', birthDate: '1961-07-01' },
+  { name: 'Elaine Thompson-Herah', nameOrigin: 'Elaine Thompson-Herah', count: 5, years: '2016-2024', country: 'Jamaica', gender: 'F', birthDate: '1992-09-28' },
+  { name: 'Maurice Greene', nameOrigin: 'Maurice Greene', count: 4, years: '2000-2004', country: 'USA', gender: 'M', birthDate: '1974-07-23' },
+  { name: 'Shelly-Ann Fraser-Pryce', nameOrigin: 'Shelly-Ann Fraser-Pryce', count: 4, years: '2008-2024', country: 'Jamaica', gender: 'F', birthDate: '1986-12-27' },
+  { name: 'Jesse Owens', nameOrigin: 'James Cleveland Owens', count: 3, years: '1936', country: 'USA', gender: 'M', birthDate: '1913-09-12' },
+  { name: 'Florence Griffith Joyner', nameOrigin: 'Florence Delorez Griffith', count: 3, years: '1988', country: 'USA', gender: 'F', birthDate: '1959-12-21' },
+  { name: 'Valerie Brisco-Hooks', nameOrigin: 'Valerie Ann Brisco-Hooks', count: 3, years: '1984', country: 'USA', gender: 'F', birthDate: '1960-07-06' },
+  { name: 'Wilma Rudolph', nameOrigin: 'Wilma Glodean Rudolph', count: 3, years: '1960', country: 'USA', gender: 'F', birthDate: '1940-06-23' },
+  { name: 'Betty Cuthbert', nameOrigin: 'Elizabeth Cuthbert', count: 3, years: '1956', country: 'Australia', gender: 'F', birthDate: '1938-04-20' },
 ]
 
 const longDistance: AthleteRecord[] = [
-  { name: 'Emil Zátopek', nameOrigin: 'Emil Zátopek', count: 4, years: '1948-1952', country: 'Czechoslovakia', gender: 'M' },
-  { name: 'Mo Farah', nameOrigin: 'Mohamed Farah', count: 4, years: '2012-2016', country: 'Great Britain', gender: 'M' },
-  { name: 'Lasse Virén', nameOrigin: 'Lasse Virén', count: 4, years: '1972-1976', country: 'Finland', gender: 'M' },
-  { name: 'Paavo Nurmi', nameOrigin: 'Paavo Johannes Nurmi', count: 3, years: '1920-1928', country: 'Finland', gender: 'M' },
-  { name: 'Kenenisa Bekele', nameOrigin: 'ከነኒሳ በቀለ', count: 3, years: '2004-2008', country: 'Ethiopia', gender: 'M' },
-  { name: 'Tirunesh Dibaba', nameOrigin: 'ትሩነሽ ዲባባ', count: 3, years: '2008-2012', country: 'Ethiopia', gender: 'F' },
+  { name: 'Emil Zátopek', nameOrigin: 'Emil Zátopek', count: 4, years: '1948-1952', country: 'Czechoslovakia', gender: 'M', birthDate: '1922-09-19' },
+  { name: 'Mo Farah', nameOrigin: 'Mohamed Farah', count: 4, years: '2012-2016', country: 'Great Britain', gender: 'M', birthDate: '1983-03-23' },
+  { name: 'Lasse Virén', nameOrigin: 'Lasse Virén', count: 4, years: '1972-1976', country: 'Finland', gender: 'M', birthDate: '1949-07-22' },
+  { name: 'Paavo Nurmi', nameOrigin: 'Paavo Johannes Nurmi', count: 3, years: '1920-1928', country: 'Finland', gender: 'M', birthDate: '1897-06-13' },
+  { name: 'Kenenisa Bekele', nameOrigin: 'ከነኒሳ በቀለ', count: 3, years: '2004-2008', country: 'Ethiopia', gender: 'M', birthDate: '1982-06-13' },
+  { name: 'Tirunesh Dibaba', nameOrigin: 'ትሩነሽ ዲባባ', count: 3, years: '2008-2012', country: 'Ethiopia', gender: 'F', birthDate: '1985-10-01' },
 ]
 
 const volleyball: AthleteRecord[] = [
-  { name: 'Karch Kiraly', nameOrigin: 'Charles Frederick Kiraly', count: 3, years: '1984-1996', country: 'USA', gender: 'M', discipline: 'both' },
-  { name: 'Regla Torres', nameOrigin: 'Regla Radameris Torres Herrera', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor' },
-  { name: 'Kerri Walsh Jennings', nameOrigin: 'Kerri Lee Walsh Jennings', count: 3, years: '2004-2012', country: 'USA', gender: 'F', discipline: 'beach' },
-  { name: 'Misty May-Treanor', nameOrigin: 'Misty Elizabeth May-Treanor', count: 3, years: '2004-2012', country: 'USA', gender: 'F', discipline: 'beach' },
-  { name: 'Mireya Luis', nameOrigin: 'Mireya Luis Hernández', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor' },
-  { name: 'Marlenis Costa', nameOrigin: 'Marlenis Costa Blanco', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor' },
-  { name: 'Regla Bell', nameOrigin: 'Regla Bell Macías', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor' },
-  { name: 'Lilia Izquierdo', nameOrigin: 'Lilia Izquierdo', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor' },
-  { name: 'Idalmis Gato', nameOrigin: 'Idalmis Gato Moya', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor' },
+  { name: 'Karch Kiraly', nameOrigin: 'Charles Frederick Kiraly', count: 3, years: '1984-1996', country: 'USA', gender: 'M', discipline: 'both', birthDate: '1960-11-03' },
+  { name: 'Regla Torres', nameOrigin: 'Regla Radameris Torres Herrera', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor', birthDate: '1975-02-12' },
+  { name: 'Kerri Walsh Jennings', nameOrigin: 'Kerri Lee Walsh Jennings', count: 3, years: '2004-2012', country: 'USA', gender: 'F', discipline: 'beach', birthDate: '1978-08-15' },
+  { name: 'Misty May-Treanor', nameOrigin: 'Misty Elizabeth May-Treanor', count: 3, years: '2004-2012', country: 'USA', gender: 'F', discipline: 'beach', birthDate: '1977-07-30' },
+  { name: 'Mireya Luis', nameOrigin: 'Mireya Luis Hernández', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor', birthDate: '1967-08-14' },
+  { name: 'Marlenis Costa', nameOrigin: 'Marlenis Costa Blanco', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor', birthDate: '1973-04-05' },
+  { name: 'Regla Bell', nameOrigin: 'Regla Bell Macías', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor', birthDate: '1970-07-06' },
+  { name: 'Lilia Izquierdo', nameOrigin: 'Lilia Izquierdo', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor', birthDate: '1967-08-18' },
+  { name: 'Idalmis Gato', nameOrigin: 'Idalmis Gato Moya', count: 3, years: '1992-2000', country: 'Cuba', gender: 'F', discipline: 'indoor', birthDate: '1971-08-08' },
 ]
 
 const badminton: AthleteRecord[] = [
-  { name: 'Ge Fei', nameOrigin: '葛菲', count: 2, years: '1996-2000', country: 'China', gender: 'F', discipline: 'doubles' },
-  { name: 'Gu Jun', nameOrigin: '顧俊', count: 2, years: '1996-2000', country: 'China', gender: 'F', discipline: 'doubles' },
-  { name: 'Gao Ling', nameOrigin: '高崚', count: 2, years: '2000-2004', country: 'China', gender: 'F', discipline: 'mixed' },
-  { name: 'Zhang Jun', nameOrigin: '张军', count: 2, years: '2000-2004', country: 'China', gender: 'M', discipline: 'mixed' },
-  { name: 'Zhang Ning', nameOrigin: '张宁', count: 2, years: '2004-2008', country: 'China', gender: 'F', discipline: 'singles' },
-  { name: 'Lin Dan', nameOrigin: '林丹', count: 2, years: '2008-2012', country: 'China', gender: 'M', discipline: 'singles' },
-  { name: 'Fu Haifeng', nameOrigin: '傅海峰', count: 2, years: '2012-2016', country: 'China', gender: 'M', discipline: 'doubles' },
-  { name: 'Zhang Nan', nameOrigin: '张楠', count: 2, years: '2012-2016', country: 'China', gender: 'M', discipline: 'multiple' },
-  { name: 'Zhao Yunlei', nameOrigin: '赵芸蕾', count: 2, years: '2012', country: 'China', gender: 'F', discipline: 'multiple' },
-  { name: 'Kim Dong-moon', nameOrigin: '김동문', count: 2, years: '1996-2004', country: 'South Korea', gender: 'M', discipline: 'multiple' },
+  { name: 'Ge Fei', nameOrigin: '葛菲', count: 2, years: '1996-2000', country: 'China', gender: 'F', discipline: 'doubles', birthDate: '1975-10-09' },
+  { name: 'Gu Jun', nameOrigin: '顧俊', count: 2, years: '1996-2000', country: 'China', gender: 'F', discipline: 'doubles', birthDate: '1975-01-26' },
+  { name: 'Gao Ling', nameOrigin: '高崚', count: 2, years: '2000-2004', country: 'China', gender: 'F', discipline: 'mixed', birthDate: '1979-03-14' },
+  { name: 'Zhang Jun', nameOrigin: '张军', count: 2, years: '2000-2004', country: 'China', gender: 'M', discipline: 'mixed', birthDate: '1977-11-26' },
+  { name: 'Zhang Ning', nameOrigin: '张宁', count: 2, years: '2004-2008', country: 'China', gender: 'F', discipline: 'singles', birthDate: '1975-05-19' },
+  { name: 'Lin Dan', nameOrigin: '林丹', count: 2, years: '2008-2012', country: 'China', gender: 'M', discipline: 'singles', birthDate: '1983-10-14' },
+  { name: 'Fu Haifeng', nameOrigin: '傅海峰', count: 2, years: '2012-2016', country: 'China', gender: 'M', discipline: 'doubles', birthDate: '1983-08-23' },
+  { name: 'Zhang Nan', nameOrigin: '张楠', count: 2, years: '2012-2016', country: 'China', gender: 'M', discipline: 'multiple', birthDate: '1990-03-01' },
+  { name: 'Zhao Yunlei', nameOrigin: '赵芸蕾', count: 2, years: '2012', country: 'China', gender: 'F', discipline: 'multiple', birthDate: '1986-08-25' },
+  { name: 'Kim Dong-moon', nameOrigin: '김동문', count: 2, years: '1996-2004', country: 'South Korea', gender: 'M', discipline: 'multiple', birthDate: '1975-09-22' },
 ]
 
 const tableTennis: AthleteRecord[] = [
-  { name: 'Ma Long', nameOrigin: '马龙', count: 6, years: '2012-2024', country: 'China', gender: 'M' },
-  { name: 'Deng Yaping', nameOrigin: '邓亚萍', count: 4, years: '1992-1996', country: 'China', gender: 'F' },
-  { name: 'Wang Nan', nameOrigin: '王楠', count: 4, years: '2000-2008', country: 'China', gender: 'F' },
-  { name: 'Zhang Yining', nameOrigin: '张怡宁', count: 4, years: '2004-2008', country: 'China', gender: 'F' },
-  { name: 'Chen Meng', nameOrigin: '陈梦', count: 4, years: '2020-2024', country: 'China', gender: 'F' },
-  { name: 'Ma Lin', nameOrigin: '马琳', count: 3, years: '2004-2008', country: 'China', gender: 'M' },
-  { name: 'Zhang Jike', nameOrigin: '张继科', count: 3, years: '2012-2016', country: 'China', gender: 'M' },
-  { name: 'Li Xiaoxia', nameOrigin: '李晓霞', count: 3, years: '2012-2016', country: 'China', gender: 'F' },
-  { name: 'Ding Ning', nameOrigin: '丁宁', count: 3, years: '2012-2016', country: 'China', gender: 'F' },
-  { name: 'Fan Zhendong', nameOrigin: '樊振东', count: 3, years: '2020-2024', country: 'China', gender: 'M' },
+  { name: 'Ma Long', nameOrigin: '马龙', count: 6, years: '2012-2024', country: 'China', gender: 'M', birthDate: '1988-10-20' },
+  { name: 'Deng Yaping', nameOrigin: '邓亚萍', count: 4, years: '1992-1996', country: 'China', gender: 'F', birthDate: '1973-02-06' },
+  { name: 'Wang Nan', nameOrigin: '王楠', count: 4, years: '2000-2008', country: 'China', gender: 'F', birthDate: '1978-10-23' },
+  { name: 'Zhang Yining', nameOrigin: '张怡宁', count: 4, years: '2004-2008', country: 'China', gender: 'F', birthDate: '1981-10-05' },
+  { name: 'Chen Meng', nameOrigin: '陈梦', count: 4, years: '2020-2024', country: 'China', gender: 'F', birthDate: '1994-01-15' },
+  { name: 'Ma Lin', nameOrigin: '马琳', count: 3, years: '2004-2008', country: 'China', gender: 'M', birthDate: '1980-02-19' },
+  { name: 'Zhang Jike', nameOrigin: '张继科', count: 3, years: '2012-2016', country: 'China', gender: 'M', birthDate: '1988-02-16' },
+  { name: 'Li Xiaoxia', nameOrigin: '李晓霞', count: 3, years: '2012-2016', country: 'China', gender: 'F', birthDate: '1988-01-16' },
+  { name: 'Ding Ning', nameOrigin: '丁宁', count: 3, years: '2012-2016', country: 'China', gender: 'F', birthDate: '1990-06-20' },
+  { name: 'Fan Zhendong', nameOrigin: '樊振东', count: 3, years: '2020-2024', country: 'China', gender: 'M', birthDate: '1997-01-22' },
 ]
 
 // 市場規模順（1=最大）
@@ -125,5 +125,10 @@ export function getTop10(
     return (a.years || '').localeCompare(b.years || '')
   })
 
-  return filtered.slice(0, 10)
+  // 10位と同列の選手は全員含める
+  const getCount = (r: AthleteRecord) => (sport.countKey === 'mvpCount' ? (r.mvpCount ?? 0) : (r.count ?? 0))
+  const tenth = filtered[9]
+  if (!tenth) return filtered
+  const minCount = getCount(tenth)
+  return filtered.filter((r) => getCount(r) >= minCount)
 }

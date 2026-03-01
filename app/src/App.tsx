@@ -8,6 +8,13 @@ import { GOLF_MAJORS_TOP10 } from './data/golf'
 import { BASEBALL_MVP_TOP10, BASEBALL_CY_YOUNG_TOP10 } from './data/baseball'
 import type { AthleteRecord, TennisRecord, BoxingRecord, SoccerRecord } from './types'
 
+function formatBirthDate(d?: string): string {
+  if (!d) return ''
+  const [y, m, n] = d.split('-')
+  if (!y) return ''
+  return m && n ? `${y}年${parseInt(m, 10)}月${parseInt(n, 10)}日` : `${y}年`
+}
+
 function AthleteCard({
   rank,
   athlete,
@@ -20,14 +27,17 @@ function AthleteCard({
   countValue: number
 }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-0">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-3 sm:gap-4 min-w-0">
         <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-sm font-semibold text-sky-500 bg-sky-100 rounded-full">
           {rank}
         </div>
-        <div className="flex-1 min-w-0 sm:flex-initial">
+        <div className="flex-1 min-w-0">
           <p className="font-semibold text-slate-800 m-0 mb-0.5 text-sm sm:text-base">{athlete.name}</p>
           <p className="text-xs sm:text-sm text-slate-500 m-0">{athlete.nameOrigin}</p>
+          {athlete.birthDate && (
+            <p className="text-xs text-slate-500 m-0 mt-0.5">生: {formatBirthDate(athlete.birthDate)}</p>
+          )}
           {athlete.gender && (
             <span className="text-xs text-slate-500">
               {athlete.gender === 'M' ? '男子' : '女子'}
@@ -46,14 +56,17 @@ function AthleteCard({
 
 function TennisCard({ rank, r }: { rank: number; r: TennisRecord }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-0">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-3 sm:gap-4 min-w-0">
         <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-sm font-semibold text-sky-500 bg-sky-100 rounded-full">
           {rank}
         </div>
-        <div className="flex-1 min-w-0 sm:flex-initial">
+        <div className="flex-1 min-w-0">
           <p className="font-semibold text-slate-800 m-0 mb-0.5 text-sm sm:text-base">{r.name}</p>
           <p className="text-xs sm:text-sm text-slate-500 m-0">{r.nameOrigin}</p>
+          {r.birthDate && (
+            <p className="text-xs text-slate-500 m-0 mt-0.5">生: {formatBirthDate(r.birthDate)}</p>
+          )}
           <span className="text-xs text-slate-500">{r.tour}</span>
         </div>
       </div>
@@ -68,18 +81,21 @@ function TennisCard({ rank, r }: { rank: number; r: TennisRecord }) {
 
 function BoxingCard({ rank, r }: { rank: number; r: BoxingRecord }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-0">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-3 sm:gap-4 min-w-0">
         <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-sm font-semibold text-sky-500 bg-sky-100 rounded-full">
           {rank}
         </div>
-        <div className="flex-1 min-w-0 sm:flex-initial">
+        <div className="flex-1 min-w-0">
           <p className="font-semibold text-slate-800 m-0 mb-0.5 text-sm sm:text-base">{r.name}</p>
-          <p className="text-xs sm:text-sm text-slate-500 m-0">{getWeightClassLabel(r.weightClass)}</p>
+          <p className="text-xs sm:text-sm text-slate-500 m-0">{r.weightClassLabel ?? getWeightClassLabel(r.weightClass)}</p>
+          {r.birthDate && (
+            <p className="text-xs text-slate-500 m-0 mt-0.5">生: {formatBirthDate(r.birthDate)}</p>
+          )}
         </div>
       </div>
       <div className="flex-shrink-0 text-left sm:text-right border-t border-slate-100 pt-3 sm:border-0 sm:pt-0">
-        <div className="text-base sm:text-lg font-bold text-sky-500">{r.defenses}回防衛</div>
+        <div className="text-base sm:text-lg font-bold text-sky-500">{(r.totalDefenses ?? r.defenses)}回防衛</div>
         <div className="text-xs sm:text-sm text-slate-500">{r.reignStart} - {r.reignEnd}</div>
         <div className="text-xs text-slate-500 mt-0.5">{r.country} / {r.sanctioningBodies}</div>
       </div>
@@ -89,20 +105,39 @@ function BoxingCard({ rank, r }: { rank: number; r: BoxingRecord }) {
 
 function SoccerCard({ rank, r }: { rank: number; r: SoccerRecord }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-0">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-3 sm:gap-4 min-w-0">
         <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-sm font-semibold text-sky-500 bg-sky-100 rounded-full">
           {rank}
         </div>
-        <div className="flex-1 min-w-0 sm:flex-initial">
+        <div className="flex-1 min-w-0">
           <p className="font-semibold text-slate-800 m-0 mb-0.5 text-sm sm:text-base">{r.name}</p>
           <p className="text-xs sm:text-sm text-slate-500 m-0">{r.nameOrigin}</p>
+          {r.birthDate && (
+            <p className="text-xs text-slate-500 m-0 mt-0.5">生: {formatBirthDate(r.birthDate)}</p>
+          )}
           <span className="text-xs text-slate-500">{r.awardLabel}</span>
         </div>
       </div>
       <div className="flex-shrink-0 text-left sm:text-right border-t border-slate-100 pt-3 sm:border-0 sm:pt-0">
-        <div className="text-base sm:text-lg font-bold text-sky-500">{r.consecutiveWins}回連続</div>
+        {(r.consecutiveWins ?? 0) > 0 ? (
+          <div className="text-sm sm:text-base text-slate-600">{r.consecutiveWins}回連続</div>
+        ) : r.careerGoals != null ? (
+          <div className="text-base sm:text-lg font-bold text-sky-500">{r.careerGoals.toLocaleString()}得点</div>
+        ) : null}
         <div className="text-xs sm:text-sm text-slate-500">{r.years}</div>
+        {r.careerGoals != null && r.careerAppearances != null && (
+          <div className="text-xs text-slate-500 mt-0.5">
+            {(r.consecutiveWins ?? 0) > 0 ? (
+              <>生涯得点: {r.careerGoals.toLocaleString()}（{r.careerAppearances.toLocaleString()}試合・{(r.careerGoals / r.careerAppearances).toFixed(2)}点/試合）</>
+            ) : (
+              <>{r.careerAppearances.toLocaleString()}試合・{(r.careerGoals / r.careerAppearances).toFixed(2)}点/試合</>
+            )}
+          </div>
+        )}
+        {r.caps != null && (
+          <div className="text-xs text-slate-500 mt-0.5">代表出場: {r.caps}試合</div>
+        )}
         <div className="text-xs text-slate-500 mt-0.5">{r.country}</div>
       </div>
     </div>
@@ -110,11 +145,14 @@ function SoccerCard({ rank, r }: { rank: number; r: SoccerRecord }) {
 }
 
 type RankingSortBy = 'rank' | 'population' | 'spectator' | 'market'
+type SoccerSortBy = 'careerGoals' | 'caps' | 'careerAppearances' | 'goalsPerGame'
 
 function App() {
   const [pageId, setPageId] = useState(SIDEBAR_ITEMS[0].id)
   const [rankingSortBy, setRankingSortBy] = useState<RankingSortBy>('rank')
   const [rankingSortDesc, setRankingSortDesc] = useState(false)
+  const [soccerSortBy, setSoccerSortBy] = useState<SoccerSortBy>('careerGoals')
+  const [soccerSortDesc, setSoccerSortDesc] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const currentItem = SIDEBAR_ITEMS.find((i) => i.id === pageId)!
 
@@ -144,7 +182,18 @@ function App() {
 
   const tennisRecords = pageId === 'tennis' ? TENNIS_TOP10 : []
   const boxingRecords = pageId === 'boxing' ? getBoxingTop10() : []
-  const soccerRecords = pageId === 'soccer' ? getSoccerTop10() : []
+  const soccerRecordsRaw = pageId === 'soccer' ? getSoccerTop10() : []
+  const soccerRecords = [...soccerRecordsRaw].sort((a, b) => {
+    const dir = soccerSortDesc ? -1 : 1
+    const getVal = (r: SoccerRecord) => {
+      if (soccerSortBy === 'careerGoals') return r.careerGoals ?? 0
+      if (soccerSortBy === 'caps') return r.caps ?? 0
+      if (soccerSortBy === 'careerAppearances') return r.careerAppearances ?? 0
+      if (soccerSortBy === 'goalsPerGame') return (r.careerGoals ?? 0) / (r.careerAppearances ?? 1)
+      return r.careerGoals ?? 0
+    }
+    return (getVal(b) - getVal(a)) * dir
+  })
   const golfRecords = pageId === 'golf' ? GOLF_MAJORS_TOP10 : []
   const baseballMvp = pageId === 'baseball' ? BASEBALL_MVP_TOP10 : []
   const baseballCyYoung = pageId === 'baseball' ? BASEBALL_CY_YOUNG_TOP10 : []
@@ -258,7 +307,7 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            階級別・3回以上防衛した歴代チャンピオン
+            3回以上防衛（複数階級の通算含む）
           </span>
           <div className="flex flex-col gap-2">
             {boxingRecords.map((r, i) => (
@@ -269,14 +318,45 @@ function App() {
       )
     }
     if (pageId === 'soccer') {
+      const soccerSortClass = (col: SoccerSortBy) =>
+        `px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors ${
+          soccerSortBy === col
+            ? 'bg-sky-100 text-sky-600'
+            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+        }`
+      const handleSoccerSort = (col: SoccerSortBy) => {
+        if (soccerSortBy === col) {
+          setSoccerSortDesc((d) => !d)
+        } else {
+          setSoccerSortBy(col)
+          setSoccerSortDesc(false)
+        }
+      }
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            著名な賞を3回以上連続獲得
+            生涯得点 Top 10（公式戦）
           </span>
+          <p className="text-xs text-slate-500 mb-4">
+            クラブ＋代表の公式戦（リーグ・カップ・国際大会）
+          </p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <button type="button" className={soccerSortClass('careerGoals')} onClick={() => handleSoccerSort('careerGoals')}>
+              生涯得点 {soccerSortBy === 'careerGoals' && (soccerSortDesc ? '↑' : '↓')}
+            </button>
+            <button type="button" className={soccerSortClass('goalsPerGame')} onClick={() => handleSoccerSort('goalsPerGame')}>
+              点/試合 {soccerSortBy === 'goalsPerGame' && (soccerSortDesc ? '↑' : '↓')}
+            </button>
+            <button type="button" className={soccerSortClass('careerAppearances')} onClick={() => handleSoccerSort('careerAppearances')}>
+              生涯出場 {soccerSortBy === 'careerAppearances' && (soccerSortDesc ? '↑' : '↓')}
+            </button>
+            <button type="button" className={soccerSortClass('caps')} onClick={() => handleSoccerSort('caps')}>
+              代表出場 {soccerSortBy === 'caps' && (soccerSortDesc ? '↑' : '↓')}
+            </button>
+          </div>
           <div className="flex flex-col gap-2">
             {soccerRecords.map((r, i) => (
-              <SoccerCard key={`${r.name}-${r.award}-${r.years}`} rank={i + 1} r={r} />
+              <SoccerCard key={`${r.name}-${r.years}`} rank={i + 1} r={r} />
             ))}
           </div>
         </>
