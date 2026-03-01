@@ -3,6 +3,7 @@ import { SPORTS } from './sports'
 export interface SidebarItem {
   id: string
   label: string
+  labelEn?: string
   labelFull?: string  // 略称の正式名称（例: NFL → National Football League）
   type: 'sport' | 'tennis' | 'boxing' | 'soccer' | 'golf' | 'baseball' | 'cricket' | 'nfl' | 'f1' | 'esports' | 'mma' | 'rugby' | 'horse_racing' | 'market_ranking' | 'about'
   marketSize: number  // 市場規模順（1=最大）、0はランキングページ用
@@ -17,18 +18,18 @@ export interface SidebarItem {
 // 市場規模順（1=最大）: サッカー > NFL > ゴルフ > バスケ > クリケット > ...
 // 競技人口・観戦人口・市場規模は参考値（各種統計・レポートに基づく概算）
 const SPECIAL_PAGES: SidebarItem[] = [
-  { id: 'soccer', label: 'サッカー', type: 'soccer', marketSize: 1, population: '2.6億人', spectatorPopulation: '35億人', marketSizeUsd: '$600B', populationNum: 260, spectatorNum: 3500, marketSizeNum: 600 },
-  { id: 'nfl', label: 'NFL', labelFull: 'National Football League（ナショナルフットボールリーグ）', type: 'nfl', marketSize: 2, population: '1,500万人', spectatorPopulation: '5億人', marketSizeUsd: '$23B', populationNum: 15, spectatorNum: 500, marketSizeNum: 23 },
-  { id: 'baseball', label: '野球', type: 'baseball', marketSize: 3, population: '3,500万人', spectatorPopulation: '5億人', marketSizeUsd: '$10B', populationNum: 35, spectatorNum: 500, marketSizeNum: 10 },
-  { id: 'tennis', label: 'テニス', type: 'tennis', marketSize: 4, population: '1.1億人', spectatorPopulation: '10億人', marketSizeUsd: '$6B', populationNum: 110, spectatorNum: 1000, marketSizeNum: 6 },
-  { id: 'golf', label: 'ゴルフ', type: 'golf', marketSize: 5, population: '6,600万人', spectatorPopulation: '4.5億人', marketSizeUsd: '$84B', populationNum: 66, spectatorNum: 450, marketSizeNum: 84 },
-  { id: 'boxing', label: 'ボクシング', type: 'boxing', marketSize: 6, population: '1,000万人', spectatorPopulation: '5億人', marketSizeUsd: '$8B', populationNum: 10, spectatorNum: 500, marketSizeNum: 8 },
-  { id: 'cricket', label: 'クリケット', type: 'cricket', marketSize: 7, population: '3億人', spectatorPopulation: '25億人', marketSizeUsd: '$17B', populationNum: 300, spectatorNum: 2500, marketSizeNum: 17 },
-  { id: 'f1', label: 'F1', labelFull: 'Formula One World Championship（F1世界選手権）', type: 'f1', marketSize: 8, population: '1,000人', spectatorPopulation: '7.5億人', marketSizeUsd: '$10B', populationNum: 0.001, spectatorNum: 750, marketSizeNum: 10 },
-  { id: 'horse_racing', label: '競馬', labelFull: 'Thoroughbred Racing（サラブレッド競馬）', type: 'horse_racing', marketSize: 9, population: '5万人', spectatorPopulation: '1億人', marketSizeUsd: '$115B', populationNum: 0.05, spectatorNum: 100, marketSizeNum: 115 },
-  { id: 'esports', label: 'eスポーツ', labelFull: 'Electronic Sports（エレクトロニックスポーツ）', type: 'esports', marketSize: 10, population: '2億人', spectatorPopulation: '5億人', marketSizeUsd: '$2.5B', populationNum: 200, spectatorNum: 500, marketSizeNum: 2.5 },
-  { id: 'mma', label: 'MMA', labelFull: 'Mixed Martial Arts（総合格闘技）', type: 'mma', marketSize: 11, population: '500万人', spectatorPopulation: '4億人', marketSizeUsd: '$1.5B', populationNum: 5, spectatorNum: 400, marketSizeNum: 1.5 },
-  { id: 'rugby', label: 'ラグビー', type: 'rugby', marketSize: 12, population: '2,000万人', spectatorPopulation: '8億人', marketSizeUsd: '$5B', populationNum: 20, spectatorNum: 800, marketSizeNum: 5 },
+  { id: 'soccer', label: 'サッカー', labelEn: 'Soccer', type: 'soccer', marketSize: 1, population: '2.6億人', spectatorPopulation: '35億人', marketSizeUsd: '$600B', populationNum: 260, spectatorNum: 3500, marketSizeNum: 600 },
+  { id: 'nfl', label: 'NFL', labelEn: 'NFL', labelFull: 'National Football League（ナショナルフットボールリーグ）', type: 'nfl', marketSize: 2, population: '1,500万人', spectatorPopulation: '5億人', marketSizeUsd: '$23B', populationNum: 15, spectatorNum: 500, marketSizeNum: 23 },
+  { id: 'baseball', label: '野球', labelEn: 'Baseball', type: 'baseball', marketSize: 3, population: '3,500万人', spectatorPopulation: '5億人', marketSizeUsd: '$10B', populationNum: 35, spectatorNum: 500, marketSizeNum: 10 },
+  { id: 'tennis', label: 'テニス', labelEn: 'Tennis', type: 'tennis', marketSize: 4, population: '1.1億人', spectatorPopulation: '10億人', marketSizeUsd: '$6B', populationNum: 110, spectatorNum: 1000, marketSizeNum: 6 },
+  { id: 'golf', label: 'ゴルフ', labelEn: 'Golf', type: 'golf', marketSize: 5, population: '6,600万人', spectatorPopulation: '4.5億人', marketSizeUsd: '$84B', populationNum: 66, spectatorNum: 450, marketSizeNum: 84 },
+  { id: 'boxing', label: 'ボクシング', labelEn: 'Boxing', type: 'boxing', marketSize: 6, population: '1,000万人', spectatorPopulation: '5億人', marketSizeUsd: '$8B', populationNum: 10, spectatorNum: 500, marketSizeNum: 8 },
+  { id: 'cricket', label: 'クリケット', labelEn: 'Cricket', type: 'cricket', marketSize: 7, population: '3億人', spectatorPopulation: '25億人', marketSizeUsd: '$17B', populationNum: 300, spectatorNum: 2500, marketSizeNum: 17 },
+  { id: 'f1', label: 'F1', labelEn: 'F1', labelFull: 'Formula One World Championship（F1世界選手権）', type: 'f1', marketSize: 8, population: '1,000人', spectatorPopulation: '7.5億人', marketSizeUsd: '$10B', populationNum: 0.001, spectatorNum: 750, marketSizeNum: 10 },
+  { id: 'horse_racing', label: '競馬', labelEn: 'Horse Racing', labelFull: 'Thoroughbred Racing（サラブレッド競馬）', type: 'horse_racing', marketSize: 9, population: '5万人', spectatorPopulation: '1億人', marketSizeUsd: '$115B', populationNum: 0.05, spectatorNum: 100, marketSizeNum: 115 },
+  { id: 'esports', label: 'eスポーツ', labelEn: 'eSports', labelFull: 'Electronic Sports（エレクトロニックスポーツ）', type: 'esports', marketSize: 10, population: '2億人', spectatorPopulation: '5億人', marketSizeUsd: '$2.5B', populationNum: 200, spectatorNum: 500, marketSizeNum: 2.5 },
+  { id: 'mma', label: 'MMA', labelEn: 'MMA', labelFull: 'Mixed Martial Arts（総合格闘技）', type: 'mma', marketSize: 11, population: '500万人', spectatorPopulation: '4億人', marketSizeUsd: '$1.5B', populationNum: 5, spectatorNum: 400, marketSizeNum: 1.5 },
+  { id: 'rugby', label: 'ラグビー', labelEn: 'Rugby', type: 'rugby', marketSize: 12, population: '2,000万人', spectatorPopulation: '8億人', marketSizeUsd: '$5B', populationNum: 20, spectatorNum: 800, marketSizeNum: 5 },
 ]
 
 // スポーツ別の競技人口・観戦人口・市場規模（SPORTS にないものは pages で定義）
@@ -46,6 +47,7 @@ const SPORT_META: Record<string, { population: string; spectatorPopulation: stri
 const MARKET_RANKING_PAGE: SidebarItem = {
   id: 'market_ranking',
   label: '市場規模ランキング',
+  labelEn: 'Market Ranking',
   type: 'market_ranking',
   marketSize: 0,
   population: '—',
@@ -60,6 +62,7 @@ const MARKET_RANKING_PAGE: SidebarItem = {
 const ABOUT_PAGE: SidebarItem = {
   id: 'about',
   label: 'このライブラリーの趣旨',
+  labelEn: 'About',
   type: 'about',
   marketSize: 999,
   population: '—',
@@ -78,6 +81,7 @@ const ALL_ITEMS: SidebarItem[] = [
     return {
       id: s.id,
       label: s.label,
+      labelEn: s.labelEn,
       type: 'sport' as const,
       marketSize: s.marketSize ?? 99,
       population: meta.population,

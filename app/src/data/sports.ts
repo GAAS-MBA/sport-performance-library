@@ -89,13 +89,13 @@ const tableTennis: AthleteRecord[] = [
 
 // 市場規模順（1=最大）
 const SPORTS_RAW: SportConfig[] = [
-  { id: 'basketball', label: 'バスケットボール', labelEn: 'Basketball', rule: '生涯得点 Top 10（NBAレギュラーシーズン）', minCount: 20000, countLabel: '得点', countKey: 'careerPoints', records: basketball, marketSize: 3 },
-  { id: 'swimming', label: '水泳', labelEn: 'Swimming', rule: 'オリンピック金メダル 3個以上', minCount: 3, countLabel: '金メダル', countKey: 'count', records: swimming, marketSize: 8 },
-  { id: 'sprint', label: '短距離走', labelEn: 'Sprint', rule: '100m/200m/4x100m 金メダル 3個以上', minCount: 3, countLabel: '金メダル', countKey: 'count', records: sprint, marketSize: 9 },
-  { id: 'long_distance', label: '長距離走', labelEn: 'Long Distance', rule: '5000m/10000m/マラソン 金メダル 3個以上', minCount: 3, countLabel: '金メダル', countKey: 'count', records: longDistance, marketSize: 10 },
-  { id: 'volleyball', label: 'バレーボール', labelEn: 'Volleyball', rule: '室内＋ビーチ 金メダル 3個以上', minCount: 3, countLabel: '金メダル', countKey: 'count', records: volleyball, marketSize: 7 },
-  { id: 'badminton', label: 'バドミントン', labelEn: 'Badminton', rule: '金メダル 2個以上', minCount: 2, countLabel: '金メダル', countKey: 'count', records: badminton, marketSize: 11 },
-  { id: 'table_tennis', label: '卓球', labelEn: 'Table Tennis', rule: '金メダル 3個以上', minCount: 3, countLabel: '金メダル', countKey: 'count', records: tableTennis, marketSize: 12 },
+  { id: 'basketball', label: 'バスケットボール', labelEn: 'Basketball', rule: '生涯得点 Top 10（NBAレギュラーシーズン）', ruleEn: 'Career Points Top 10 (NBA Regular Season)', minCount: 20000, countLabel: '得点', countKey: 'careerPoints', records: basketball, marketSize: 3 },
+  { id: 'swimming', label: '水泳', labelEn: 'Swimming', rule: 'オリンピック金メダル 3個以上', ruleEn: '3+ Olympic Gold Medals', minCount: 3, countLabel: '金メダル', countKey: 'count', records: swimming, marketSize: 8 },
+  { id: 'sprint', label: '短距離走', labelEn: 'Sprint', rule: '100m/200m/4x100m 金メダル 3個以上', ruleEn: '3+ Gold Medals (100m/200m/4x100m)', minCount: 3, countLabel: '金メダル', countKey: 'count', records: sprint, marketSize: 9 },
+  { id: 'long_distance', label: '長距離走', labelEn: 'Long Distance', rule: '5000m/10000m/マラソン 金メダル 3個以上', ruleEn: '3+ Gold Medals (5000m/10000m/Marathon)', minCount: 3, countLabel: '金メダル', countKey: 'count', records: longDistance, marketSize: 10 },
+  { id: 'volleyball', label: 'バレーボール', labelEn: 'Volleyball', rule: '室内＋ビーチ 金メダル 3個以上', ruleEn: '3+ Gold Medals (Indoor & Beach)', minCount: 3, countLabel: '金メダル', countKey: 'count', records: volleyball, marketSize: 7 },
+  { id: 'badminton', label: 'バドミントン', labelEn: 'Badminton', rule: '金メダル 2個以上', ruleEn: '2+ Gold Medals', minCount: 2, countLabel: '金メダル', countKey: 'count', records: badminton, marketSize: 11 },
+  { id: 'table_tennis', label: '卓球', labelEn: 'Table Tennis', rule: '金メダル 3個以上', ruleEn: '3+ Gold Medals', minCount: 3, countLabel: '金メダル', countKey: 'count', records: tableTennis, marketSize: 12 },
 ]
 
 export const SPORTS = [...SPORTS_RAW].sort((a, b) => (a.marketSize ?? 99) - (b.marketSize ?? 99))

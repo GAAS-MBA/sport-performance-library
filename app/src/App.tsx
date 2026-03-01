@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { t, type Lang } from './i18n'
 import { SPORTS, getTop10 } from './data/sports'
 import { SIDEBAR_ITEMS } from './data/pages'
 import { TENNIS_TOP10 } from './data/tennis'
@@ -15,24 +16,34 @@ import { MMA_TOP10 } from './data/mma'
 import { RUGBY_TOP10 } from './data/rugby'
 import type { AthleteRecord, TennisRecord, BoxingRecord, SoccerRecord } from './types'
 
-function formatBirthDate(d?: string): string {
+function formatBirthDate(lang: Lang, d?: string): string {
   if (!d) return ''
   const [y, m, n] = d.split('-')
   if (!y) return ''
+  if (lang === 'en') {
+    if (m && n) {
+      const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(m, 10) - 1]
+      return `${month} ${parseInt(n, 10)}, ${y}`
+    }
+    return y
+  }
   return m && n ? `${y}年${parseInt(m, 10)}月${parseInt(n, 10)}日` : `${y}年`
 }
 
 function AthleteCard({
+  lang,
   rank,
   athlete,
   countLabel,
   countValue,
 }: {
+  lang: Lang
   rank: number
   athlete: AthleteRecord
   countLabel: string
   countValue: number
 }) {
+  const suffix = ['MVP', 'メジャー', 'Cy Young', 'G1勝利', 'WDC', '防衛', 'W杯優勝', '世界大会優勝'].includes(countLabel) ? t(lang, 'times') : t(lang, 'countUnit')
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -43,11 +54,11 @@ function AthleteCard({
           <p className="font-semibold text-slate-800 m-0 mb-0.5 text-sm sm:text-base">{athlete.name}</p>
           <p className="text-xs sm:text-sm text-slate-500 m-0">{athlete.nameOrigin}</p>
           {athlete.birthDate && (
-            <p className="text-xs text-slate-500 m-0 mt-0.5">生: {formatBirthDate(athlete.birthDate)}</p>
+            <p className="text-xs text-slate-500 m-0 mt-0.5">{t(lang, 'birth')}: {formatBirthDate(lang, athlete.birthDate)}</p>
           )}
           {athlete.gender && (
             <span className="text-xs text-slate-500">
-              {athlete.gender === 'M' ? '男子' : '女子'}
+              {athlete.gender === 'M' ? t(lang, 'male') : t(lang, 'female')}
             </span>
           )}
         </div>
@@ -55,13 +66,13 @@ function AthleteCard({
       <div className="flex-shrink-0 text-left sm:text-right border-t border-slate-100 pt-3 sm:border-0 sm:pt-0">
         <div className="text-base sm:text-lg font-bold text-sky-500">
           {countLabel === '得点'
-            ? `${countValue.toLocaleString()}得点`
-            : `${countValue}${['MVP', 'メジャー', 'Cy Young', 'G1勝利', 'WDC', '防衛', 'W杯優勝', '世界大会優勝'].includes(countLabel) ? '回' : '個'}`}
+            ? `${countValue.toLocaleString()}${t(lang, 'points')}`
+            : `${countValue}${suffix}`}
         </div>
         <div className="text-xs sm:text-sm text-slate-500">{athlete.years}</div>
         {countLabel === '得点' && athlete.careerGames != null && (
           <div className="text-xs text-slate-500 mt-0.5">
-            {athlete.careerGames.toLocaleString()}試合・{(countValue / athlete.careerGames).toFixed(1)}点/試合
+            {athlete.careerGames.toLocaleString()}{t(lang, 'games')}・{(countValue / athlete.careerGames).toFixed(1)}{t(lang, 'ptsPerGame')}
           </div>
         )}
         <div className="text-xs text-slate-500 mt-0.5">{athlete.country}</div>
@@ -70,7 +81,7 @@ function AthleteCard({
   )
 }
 
-function TennisCard({ rank, r }: { rank: number; r: TennisRecord }) {
+function TennisCard({ lang, rank, r }: { lang: Lang; rank: number; r: TennisRecord }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -81,21 +92,21 @@ function TennisCard({ rank, r }: { rank: number; r: TennisRecord }) {
           <p className="font-semibold text-slate-800 m-0 mb-0.5 text-sm sm:text-base">{r.name}</p>
           <p className="text-xs sm:text-sm text-slate-500 m-0">{r.nameOrigin}</p>
           {r.birthDate && (
-            <p className="text-xs text-slate-500 m-0 mt-0.5">生: {formatBirthDate(r.birthDate)}</p>
+            <p className="text-xs text-slate-500 m-0 mt-0.5">{t(lang, 'birth')}: {formatBirthDate(lang, r.birthDate)}</p>
           )}
           <span className="text-xs text-slate-500">{r.tour}</span>
         </div>
       </div>
       <div className="flex-shrink-0 text-left sm:text-right border-t border-slate-100 pt-3 sm:border-0 sm:pt-0">
         <div className="text-base sm:text-lg font-bold text-sky-500">GS {r.grandSlamTitles}</div>
-        <div className="text-xs sm:text-sm text-slate-500">世界1位 {r.totalWeeksNo1}週</div>
+        <div className="text-xs sm:text-sm text-slate-500">{t(lang, 'worldNo1')} {r.totalWeeksNo1}{t(lang, 'weeks')}</div>
         <div className="text-xs text-slate-500 mt-0.5">{r.country}</div>
       </div>
     </div>
   )
 }
 
-function BoxingCard({ rank, r }: { rank: number; r: BoxingRecord }) {
+function BoxingCard({ lang, rank, r }: { lang: Lang; rank: number; r: BoxingRecord }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -106,12 +117,12 @@ function BoxingCard({ rank, r }: { rank: number; r: BoxingRecord }) {
           <p className="font-semibold text-slate-800 m-0 mb-0.5 text-sm sm:text-base">{r.name}</p>
           <p className="text-xs sm:text-sm text-slate-500 m-0">{r.weightClassLabel ?? getWeightClassLabel(r.weightClass)}</p>
           {r.birthDate && (
-            <p className="text-xs text-slate-500 m-0 mt-0.5">生: {formatBirthDate(r.birthDate)}</p>
+            <p className="text-xs text-slate-500 m-0 mt-0.5">{t(lang, 'birth')}: {formatBirthDate(lang, r.birthDate)}</p>
           )}
         </div>
       </div>
       <div className="flex-shrink-0 text-left sm:text-right border-t border-slate-100 pt-3 sm:border-0 sm:pt-0">
-        <div className="text-base sm:text-lg font-bold text-sky-500">{(r.totalDefenses ?? r.defenses)}回防衛</div>
+        <div className="text-base sm:text-lg font-bold text-sky-500">{(r.totalDefenses ?? r.defenses)}{t(lang, 'defenses')}</div>
         <div className="text-xs sm:text-sm text-slate-500">{r.reignStart} - {r.reignEnd}</div>
         <div className="text-xs text-slate-500 mt-0.5">{r.country} / {r.sanctioningBodies}</div>
       </div>
@@ -119,7 +130,7 @@ function BoxingCard({ rank, r }: { rank: number; r: BoxingRecord }) {
   )
 }
 
-function SoccerCard({ rank, r }: { rank: number; r: SoccerRecord }) {
+function SoccerCard({ lang, rank, r }: { lang: Lang; rank: number; r: SoccerRecord }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 sm:px-5 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -130,29 +141,29 @@ function SoccerCard({ rank, r }: { rank: number; r: SoccerRecord }) {
           <p className="font-semibold text-slate-800 m-0 mb-0.5 text-sm sm:text-base">{r.name}</p>
           <p className="text-xs sm:text-sm text-slate-500 m-0">{r.nameOrigin}</p>
           {r.birthDate && (
-            <p className="text-xs text-slate-500 m-0 mt-0.5">生: {formatBirthDate(r.birthDate)}</p>
+            <p className="text-xs text-slate-500 m-0 mt-0.5">{t(lang, 'birth')}: {formatBirthDate(lang, r.birthDate)}</p>
           )}
           <span className="text-xs text-slate-500">{r.awardLabel}</span>
         </div>
       </div>
       <div className="flex-shrink-0 text-left sm:text-right border-t border-slate-100 pt-3 sm:border-0 sm:pt-0">
         {(r.consecutiveWins ?? 0) > 0 ? (
-          <div className="text-sm sm:text-base text-slate-600">{r.consecutiveWins}回連続</div>
+          <div className="text-sm sm:text-base text-slate-600">{r.consecutiveWins}{t(lang, 'consecutiveWins')}</div>
         ) : r.careerGoals != null ? (
-          <div className="text-base sm:text-lg font-bold text-sky-500">{r.careerGoals.toLocaleString()}得点</div>
+          <div className="text-base sm:text-lg font-bold text-sky-500">{r.careerGoals.toLocaleString()}{t(lang, 'points')}</div>
         ) : null}
         <div className="text-xs sm:text-sm text-slate-500">{r.years}</div>
         {r.careerGoals != null && r.careerAppearances != null && (
           <div className="text-xs text-slate-500 mt-0.5">
             {(r.consecutiveWins ?? 0) > 0 ? (
-              <>生涯得点: {r.careerGoals.toLocaleString()}（{r.careerAppearances.toLocaleString()}試合・{(r.careerGoals / r.careerAppearances).toFixed(2)}点/試合）</>
+              <>{t(lang, 'careerGoals')}: {r.careerGoals.toLocaleString()}（{r.careerAppearances.toLocaleString()}{t(lang, 'games')}・{(r.careerGoals / r.careerAppearances).toFixed(2)}{t(lang, 'ptsPerGame')}）</>
             ) : (
-              <>{r.careerAppearances.toLocaleString()}試合・{(r.careerGoals / r.careerAppearances).toFixed(2)}点/試合</>
+              <>{r.careerAppearances.toLocaleString()}{t(lang, 'games')}・{(r.careerGoals / r.careerAppearances).toFixed(2)}{t(lang, 'ptsPerGame')}</>
             )}
           </div>
         )}
         {r.caps != null && (
-          <div className="text-xs text-slate-500 mt-0.5">代表出場: {r.caps}試合</div>
+          <div className="text-xs text-slate-500 mt-0.5">{t(lang, 'caps')}: {r.caps}{t(lang, 'capsGames')}</div>
         )}
         <div className="text-xs text-slate-500 mt-0.5">{r.country}</div>
       </div>
@@ -169,6 +180,7 @@ function App() {
   const [rankingSortDesc, setRankingSortDesc] = useState(false)
   const [soccerSortBy, setSoccerSortBy] = useState<SoccerSortBy>('careerGoals')
   const [soccerSortDesc, setSoccerSortDesc] = useState(false)
+  const [lang, setLang] = useState<Lang>('ja')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const currentItem = SIDEBAR_ITEMS.find((i) => i.id === pageId)!
 
@@ -231,23 +243,23 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            競技人口・市場規模は参考値（各種統計・レポートに基づく概算）
+            {t(lang, 'marketNote')}
           </span>
           <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
             <div className="flex flex-col gap-1 min-w-[320px]">
               <div className="grid grid-cols-[2.5rem_1fr_3.5rem_3.5rem_4rem] sm:grid-cols-[3rem_1fr_5rem_5rem_5rem] gap-2 sm:gap-3 py-2.5 sm:py-3 px-3 sm:px-5 text-[0.65rem] sm:text-xs font-semibold text-slate-500 uppercase tracking-wide border-b border-slate-200">
                 <button type="button" className={colSortClass('rank')} onClick={() => handleRankingSort('rank')}>
-                  順位 {rankingSortBy === 'rank' && (rankingSortDesc ? '↓' : '↑')}
+                  {t(lang, 'rank')} {rankingSortBy === 'rank' && (rankingSortDesc ? '↓' : '↑')}
                 </button>
-                <span className="uppercase">スポーツ</span>
+                <span className="uppercase">{t(lang, 'sportCol')}</span>
                 <button type="button" className={colSortClass('population')} onClick={() => handleRankingSort('population')}>
-                  競技 {rankingSortBy === 'population' && (rankingSortDesc ? '↓' : '↑')}
+                  {t(lang, 'participation')} {rankingSortBy === 'population' && (rankingSortDesc ? '↓' : '↑')}
                 </button>
                 <button type="button" className={colSortClass('spectator')} onClick={() => handleRankingSort('spectator')}>
-                  観戦 {rankingSortBy === 'spectator' && (rankingSortDesc ? '↓' : '↑')}
+                  {t(lang, 'spectator')} {rankingSortBy === 'spectator' && (rankingSortDesc ? '↓' : '↑')}
                 </button>
                 <button type="button" className={colSortClass('market')} onClick={() => handleRankingSort('market')}>
-                  市場 {rankingSortBy === 'market' && (rankingSortDesc ? '↓' : '↑')}
+                  {t(lang, 'market')} {rankingSortBy === 'market' && (rankingSortDesc ? '↓' : '↑')}
                 </button>
               </div>
               {rankingItems.map((item, idx) => (
@@ -260,7 +272,7 @@ function App() {
                     {rankingSortBy === 'rank' ? item.marketSize : idx + 1}
                   </span>
                   <span className="font-medium truncate">
-                    {item.label}
+                    {lang === 'en' && item.labelEn ? item.labelEn : item.label}
                     {item.labelFull && <span className="block text-[0.65rem] sm:text-[0.7rem] font-normal text-slate-500 mt-0.5">{item.labelFull}</span>}
                   </span>
                   <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{item.population}</span>
@@ -276,38 +288,26 @@ function App() {
     if (isAbout) {
       return (
         <div className="max-w-[560px] w-full">
-          <h2 className="text-lg sm:text-xl font-semibold text-slate-800 m-0 mb-4 sm:mb-6">Sport Performance Library について</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-800 m-0 mb-4 sm:mb-6">{t(lang, 'aboutTitle')}</h2>
           <section className="mb-6 sm:mb-8">
-            <h3 className="text-sm sm:text-[0.95rem] font-semibold text-sky-500 m-0 mb-2 sm:mb-3">趣旨</h3>
-            <p className="text-sm sm:text-[0.9rem] leading-relaxed text-slate-800 m-0">
-              Sport Performance Library は、<strong>スポーツパフォーマンスの個別最適化データ</strong>を集約・提供するライブラリーです。
-              各スポーツの競技人口・市場規模・観戦人口といった産業構造を理解し、
-              さらに各競技における「ベストプラクティス」としての歴代トップ選手を参照することで、
-              スポーツビジネスやパフォーマンス分析のための基礎データを提供します。
-            </p>
+            <h3 className="text-sm sm:text-[0.95rem] font-semibold text-sky-500 m-0 mb-2 sm:mb-3">{t(lang, 'aboutPurpose')}</h3>
+            <p className="text-sm sm:text-[0.9rem] leading-relaxed text-slate-800 m-0">{t(lang, 'aboutPurposeText')}</p>
           </section>
           <section className="mb-6 sm:mb-8">
-            <h3 className="text-sm sm:text-[0.95rem] font-semibold text-sky-500 m-0 mb-2 sm:mb-3">収録内容</h3>
+            <h3 className="text-sm sm:text-[0.95rem] font-semibold text-sky-500 m-0 mb-2 sm:mb-3">{t(lang, 'aboutContent')}</h3>
             <ul className="m-0 pl-5 text-sm sm:text-[0.9rem] leading-relaxed text-slate-800">
-              <li className="mb-2"><strong>市場規模ランキング</strong> — 競技人口・観戦人口・市場規模（ドルベース）によるソート可能な一覧</li>
-              <li className="mb-2"><strong>種目別 Top 10</strong> — 各スポーツの選定基準（MVP、金メダル、優勝回数など）に基づく歴代選手データ</li>
-              <li className="mb-2"><strong>産業構造</strong> — 競技人口と観戦人口を分離し、スポーツ産業の特性を可視化</li>
+              <li className="mb-2">{t(lang, 'aboutContent1')}</li>
+              <li className="mb-2">{t(lang, 'aboutContent2')}</li>
+              <li className="mb-2">{t(lang, 'aboutContent3')}</li>
             </ul>
           </section>
           <section className="mb-6 sm:mb-8">
-            <h3 className="text-sm sm:text-[0.95rem] font-semibold text-sky-500 m-0 mb-2 sm:mb-3">利用目的</h3>
-            <p className="text-sm sm:text-[0.9rem] leading-relaxed text-slate-800 m-0">
-              本ライブラリーは、スポーツ投資・マーケティング・メディア分析・アスリート育成など、
-              スポーツ産業に関わる意思決定のための<strong>参照データ</strong>として活用できます。
-              数値は各種統計・レポートに基づく概算であり、出典は随時更新されます。
-            </p>
+            <h3 className="text-sm sm:text-[0.95rem] font-semibold text-sky-500 m-0 mb-2 sm:mb-3">{t(lang, 'aboutUsage')}</h3>
+            <p className="text-sm sm:text-[0.9rem] leading-relaxed text-slate-800 m-0">{t(lang, 'aboutUsageText')}</p>
           </section>
           <section className="mb-6 sm:mb-8">
-            <h3 className="text-sm sm:text-[0.95rem] font-semibold text-sky-500 m-0 mb-2 sm:mb-3">免責事項</h3>
-            <p className="text-sm sm:text-[0.9rem] leading-relaxed text-slate-800 m-0">
-              競技人口・観戦人口・市場規模は参考値であり、調査機関・手法により変動します。
-              選手データは公開情報に基づき、選定基準は種目ごとに異なります。
-            </p>
+            <h3 className="text-sm sm:text-[0.95rem] font-semibold text-sky-500 m-0 mb-2 sm:mb-3">{t(lang, 'aboutDisclaimer')}</h3>
+            <p className="text-sm sm:text-[0.9rem] leading-relaxed text-slate-800 m-0">{t(lang, 'aboutDisclaimerText')}</p>
           </section>
         </div>
       )
@@ -316,11 +316,11 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            総合ベストプラクティス（GS優勝・世界1位週数）
+            {t(lang, 'rule_tennis')}
           </span>
           <div className="flex flex-col gap-2">
             {tennisRecords.map((r, i) => (
-              <TennisCard key={`${r.name}-${r.period}`} rank={i + 1} r={r} />
+              <TennisCard key={`${r.name}-${r.period}`} lang={lang} rank={i + 1} r={r} />
             ))}
           </div>
         </>
@@ -330,11 +330,11 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            3回以上防衛（複数階級の通算含む）
+            {t(lang, 'rule_boxing')}
           </span>
           <div className="flex flex-col gap-2">
             {boxingRecords.map((r, i) => (
-              <BoxingCard key={`${r.name}-${r.weightClass}-${r.reignStart}`} rank={i + 1} r={r} />
+              <BoxingCard key={`${r.name}-${r.weightClass}-${r.reignStart}`} lang={lang} rank={i + 1} r={r} />
             ))}
           </div>
         </>
@@ -358,28 +358,28 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            生涯得点 Top 10（公式戦）
+            {t(lang, 'rule_soccer')}
           </span>
           <p className="text-xs text-slate-500 mb-4">
-            クラブ＋代表の公式戦（リーグ・カップ・国際大会）
+            {t(lang, 'rule_soccer_sub')}
           </p>
           <div className="flex flex-wrap gap-2 mb-4">
             <button type="button" className={soccerSortClass('careerGoals')} onClick={() => handleSoccerSort('careerGoals')}>
-              生涯得点 {soccerSortBy === 'careerGoals' && (soccerSortDesc ? '↑' : '↓')}
+              {t(lang, 'careerGoals')} {soccerSortBy === 'careerGoals' && (soccerSortDesc ? '↑' : '↓')}
             </button>
             <button type="button" className={soccerSortClass('goalsPerGame')} onClick={() => handleSoccerSort('goalsPerGame')}>
-              点/試合 {soccerSortBy === 'goalsPerGame' && (soccerSortDesc ? '↑' : '↓')}
+              {t(lang, 'ptsPerGame')} {soccerSortBy === 'goalsPerGame' && (soccerSortDesc ? '↑' : '↓')}
             </button>
             <button type="button" className={soccerSortClass('careerAppearances')} onClick={() => handleSoccerSort('careerAppearances')}>
-              生涯出場 {soccerSortBy === 'careerAppearances' && (soccerSortDesc ? '↑' : '↓')}
+              {t(lang, 'careerAppearances')} {soccerSortBy === 'careerAppearances' && (soccerSortDesc ? '↑' : '↓')}
             </button>
             <button type="button" className={soccerSortClass('caps')} onClick={() => handleSoccerSort('caps')}>
-              代表出場 {soccerSortBy === 'caps' && (soccerSortDesc ? '↑' : '↓')}
+              {t(lang, 'caps')} {soccerSortBy === 'caps' && (soccerSortDesc ? '↑' : '↓')}
             </button>
           </div>
           <div className="flex flex-col gap-2">
             {soccerRecords.map((r, i) => (
-              <SoccerCard key={`${r.name}-${r.years}`} rank={i + 1} r={r} />
+              <SoccerCard key={`${r.name}-${r.years}`} lang={lang} rank={i + 1} r={r} />
             ))}
           </div>
         </>
@@ -389,12 +389,13 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            男子メジャー（Masters, U.S. Open, The Open, PGA）3回以上優勝
+            {t(lang, 'rule_golf')}
           </span>
           <div className="flex flex-col gap-2">
             {golfRecords.map((r, i) => (
               <AthleteCard
                 key={`${r.name}-${r.years}`}
+                lang={lang}
                 rank={i + 1}
                 athlete={r}
                 countLabel="メジャー"
@@ -410,12 +411,13 @@ function App() {
         <>
           <div className="mb-6">
             <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-              MLB MVP 3回以上獲得
+              {t(lang, 'rule_baseball_mvp')}
             </span>
             <div className="flex flex-col gap-2">
               {baseballMvp.map((r, i) => (
                 <AthleteCard
                   key={`mvp-${r.name}-${r.years}`}
+                  lang={lang}
                   rank={i + 1}
                   athlete={r}
                   countLabel="MVP"
@@ -426,12 +428,13 @@ function App() {
           </div>
           <div>
             <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-              Cy Young Award 3回以上獲得
+              {t(lang, 'rule_baseball_cy')}
             </span>
             <div className="flex flex-col gap-2">
               {baseballCyYoung.map((r, i) => (
                 <AthleteCard
                   key={`cy-${r.name}-${r.years}`}
+                  lang={lang}
                   rank={i + 1}
                   athlete={r}
                   countLabel="Cy Young"
@@ -447,11 +450,11 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            騎手 G1 勝利数 Top 10
+            {t(lang, 'rule_horse_racing')}
           </span>
           <div className="flex flex-col gap-2">
             {horseRacingRecords.map((r, i) => (
-              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="G1勝利" countValue={r.count ?? 0} />
+              <AthleteCard key={`${r.name}-${r.years}`} lang={lang} rank={i + 1} athlete={r} countLabel="G1勝利" countValue={r.count ?? 0} />
             ))}
           </div>
         </>
@@ -461,11 +464,11 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            テストマッチ センチュリー（100点）達成数 Top 10
+            {t(lang, 'rule_cricket')}
           </span>
           <div className="flex flex-col gap-2">
             {cricketRecords.map((r, i) => (
-              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="センチュリー" countValue={r.count ?? 0} />
+              <AthleteCard key={`${r.name}-${r.years}`} lang={lang} rank={i + 1} athlete={r} countLabel="センチュリー" countValue={r.count ?? 0} />
             ))}
           </div>
         </>
@@ -475,11 +478,11 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            NFL MVP 獲得者 Top 10
+            {t(lang, 'rule_nfl')}
           </span>
           <div className="flex flex-col gap-2">
             {nflRecords.map((r, i) => (
-              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="MVP" countValue={r.count ?? 0} />
+              <AthleteCard key={`${r.name}-${r.years}`} lang={lang} rank={i + 1} athlete={r} countLabel="MVP" countValue={r.count ?? 0} />
             ))}
           </div>
         </>
@@ -489,11 +492,11 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            F1 ワールドチャンピオン 3回以上
+            {t(lang, 'rule_f1')}
           </span>
           <div className="flex flex-col gap-2">
             {f1Records.map((r, i) => (
-              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="WDC" countValue={r.count ?? 0} />
+              <AthleteCard key={`${r.name}-${r.years}`} lang={lang} rank={i + 1} athlete={r} countLabel="WDC" countValue={r.count ?? 0} />
             ))}
           </div>
         </>
@@ -503,11 +506,11 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            eスポーツ 世界大会優勝 Top 10
+            {t(lang, 'rule_esports')}
           </span>
           <div className="flex flex-col gap-2">
             {esportsRecords.map((r, i) => (
-              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="世界大会優勝" countValue={r.count ?? 0} />
+              <AthleteCard key={`${r.name}-${r.years}`} lang={lang} rank={i + 1} athlete={r} countLabel="世界大会優勝" countValue={r.count ?? 0} />
             ))}
           </div>
         </>
@@ -517,11 +520,11 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            UFC 王座防衛 3回以上
+            {t(lang, 'rule_mma')}
           </span>
           <div className="flex flex-col gap-2">
             {mmaRecords.map((r, i) => (
-              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="防衛" countValue={r.count ?? 0} />
+              <AthleteCard key={`${r.name}-${r.years}`} lang={lang} rank={i + 1} athlete={r} countLabel="防衛" countValue={r.count ?? 0} />
             ))}
           </div>
         </>
@@ -531,11 +534,11 @@ function App() {
       return (
         <>
           <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-            ラグビーワールドカップ優勝・キャップ数 Top 10
+            {t(lang, 'rule_rugby')}
           </span>
           <div className="flex flex-col gap-2">
             {rugbyRecords.map((r, i) => (
-              <AthleteCard key={`${r.name}-${r.years}`} rank={i + 1} athlete={r} countLabel="W杯優勝" countValue={r.count ?? 0} />
+              <AthleteCard key={`${r.name}-${r.years}`} lang={lang} rank={i + 1} athlete={r} countLabel="W杯優勝" countValue={r.count ?? 0} />
             ))}
           </div>
         </>
@@ -545,12 +548,13 @@ function App() {
     return (
       <>
         <span className="inline-block px-3 py-1 text-xs font-medium bg-sky-100 text-sky-500 rounded-full mb-4">
-          {s.rule}
+          {lang === 'en' && s.ruleEn ? s.ruleEn : s.rule}
         </span>
         <div className="flex flex-col gap-2">
           {athletes.map((a, i) => (
             <AthleteCard
               key={`${a.name}-${a.years}`}
+              lang={lang}
               rank={i + 1}
               athlete={a}
               countLabel={s.countLabel}
@@ -575,7 +579,7 @@ function App() {
   const SidebarContent = () => (
     <>
       <div className="px-3 sm:px-5 pb-3 sm:pb-4 border-b border-slate-200 mb-3">
-        <h2 className="text-[0.65rem] sm:text-xs font-semibold text-slate-500 uppercase tracking-wide m-0">市場規模ランキング</h2>
+        <h2 className="text-[0.65rem] sm:text-xs font-semibold text-slate-500 uppercase tracking-wide m-0">{t(lang, 'marketRanking')}</h2>
       </div>
       <nav className="flex flex-col gap-0.5 px-2 sm:px-3 overflow-y-auto flex-1">
         {SIDEBAR_ITEMS.map((item) => (
@@ -585,9 +589,9 @@ function App() {
             onClick={() => handleSidebarItemClick(item.id)}
           >
             {item.type === 'market_ranking' ? (
-              <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-base font-normal rounded" title="一覧">≡</span>
+              <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-base font-normal rounded" title={t(lang, 'listTitle')}>≡</span>
             ) : item.type === 'about' ? (
-              <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-base font-normal rounded" title="趣旨">ℹ</span>
+              <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-base font-normal rounded" title={t(lang, 'aboutIconTitle')}>ℹ</span>
             ) : (
               <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-[0.7rem] font-semibold text-sky-500 bg-sky-100 rounded-full">
                 {item.marketSize}
@@ -595,12 +599,12 @@ function App() {
             )}
             <div className="flex-1 min-w-0 flex flex-col gap-0.5">
               <span className="font-medium">
-                {item.label}
+                {lang === 'en' && item.labelEn ? item.labelEn : item.label}
                 {item.labelFull && <span className="block text-[0.65rem] font-normal text-slate-500 mt-0.5">{item.labelFull}</span>}
               </span>
               {item.type !== 'market_ranking' && item.type !== 'about' && (
                 <span className={`text-[0.7rem] font-normal opacity-90 ${item.id === pageId ? 'text-sky-500' : 'text-slate-500'}`}>
-                  競技 {item.population} · 観戦 {item.spectatorPopulation} · {item.marketSizeUsd}
+                  {t(lang, 'participation')} {item.population} · {t(lang, 'spectator')} {item.spectatorPopulation} · {item.marketSizeUsd}
                 </span>
               )}
             </div>
@@ -629,12 +633,12 @@ function App() {
         `}
       >
         <div className="sm:hidden flex items-center justify-between mb-3 pb-3 border-b border-slate-200">
-          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wide m-0">メニュー</h2>
+          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wide m-0">{t(lang, 'menu')}</h2>
           <button
             type="button"
             onClick={() => setSidebarOpen(false)}
             className="p-2 -m-2 rounded-lg hover:bg-slate-100 text-slate-500"
-            aria-label="メニューを閉じる"
+            aria-label={t(lang, 'menuClose')}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -650,17 +654,33 @@ function App() {
             type="button"
             onClick={() => setSidebarOpen(true)}
             className="sm:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 text-slate-600 flex-shrink-0"
-            aria-label="メニューを開く"
+            aria-label={t(lang, 'menuOpen')}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
           <div className="flex-1 text-center sm:text-center min-w-0">
-            <h1 className="text-xl sm:text-[1.75rem] font-bold text-slate-800 m-0 mb-1 tracking-tight">Sport Performance Library</h1>
-            <p className="text-sm sm:text-[0.95rem] text-slate-500 m-0">スポーツパフォーマンス 個別最適化データ</p>
+            <h1 className="text-xl sm:text-[1.75rem] font-bold text-slate-800 m-0 mb-1 tracking-tight">{t(lang, 'title')}</h1>
+            <p className="text-sm sm:text-[0.95rem] text-slate-500 m-0">{t(lang, 'subtitle')}</p>
           </div>
-          <div className="sm:hidden w-10 shrink-0" aria-hidden="true" />
+          <div className="flex items-center gap-1 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => setLang('ja')}
+              className={`px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors ${lang === 'ja' ? 'bg-sky-100 text-sky-600' : 'text-slate-500 hover:bg-slate-100'}`}
+            >
+              Ja
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang('en')}
+              className={`px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors ${lang === 'en' ? 'bg-sky-100 text-sky-600' : 'text-slate-500 hover:bg-slate-100'}`}
+            >
+              En
+            </button>
+          </div>
+          <div className="sm:hidden w-4 shrink-0" aria-hidden="true" />
         </header>
 
         <div>{renderContent()}</div>

@@ -66,6 +66,7 @@ export interface SportConfig {
   label: string
   labelEn: string
   rule: string
+  ruleEn?: string
   minCount: number
   countLabel: string
   records: AthleteRecord[]
