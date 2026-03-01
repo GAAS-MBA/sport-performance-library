@@ -99,3 +99,14 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
   ...SPORTS_ONLY.map((item, idx) => ({ ...item, marketSize: idx + 1 })),
   ABOUT_PAGE,
 ]
+
+/** pageId を URL パスに変換（SEO 用） */
+export function getPagePath(pageId: string): string {
+  if (pageId === 'market_ranking') return ''
+  return '/' + pageId
+}
+
+/** 全ページのパス一覧（sitemap 用） */
+export function getAllPagePaths(): string[] {
+  return SIDEBAR_ITEMS.map((i) => getPagePath(i.id))
+}

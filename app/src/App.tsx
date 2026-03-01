@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { t, formatPopulation, formatSpectator, formatMarketSize, type Lang } from './i18n'
 import { SPORTS, getTop10 } from './data/sports'
-import { SIDEBAR_ITEMS } from './data/pages'
+import { SIDEBAR_ITEMS, getPagePath } from './data/pages'
 import { TENNIS_TOP10 } from './data/tennis'
 import { getBoxingTop10, getWeightClassLabel } from './data/boxing'
 import { getSoccerTop10 } from './data/soccer'
@@ -175,7 +176,16 @@ type RankingSortBy = 'rank' | 'population' | 'spectator' | 'market'
 type SoccerSortBy = 'careerGoals' | 'caps' | 'careerAppearances' | 'goalsPerGame'
 
 function App() {
-  const [pageId, setPageId] = useState(SIDEBAR_ITEMS[0].id)
+  const { pageId: pageIdParam } = useParams<{ pageId?: string }>()
+  const navigate = useNavigate()
+  const resolvedId = pageIdParam === undefined || pageIdParam === '' ? 'market_ranking' : pageIdParam
+  const isValid = SIDEBAR_ITEMS.some((i) => i.id === resolvedId)
+  const pageId = isValid ? resolvedId : SIDEBAR_ITEMS[0].id
+
+  useEffect(() => {
+    if (!isValid && pageIdParam) navigate('/', { replace: true })
+  }, [isValid, pageIdParam, navigate])
+
   const [rankingSortBy, setRankingSortBy] = useState<RankingSortBy>('rank')
   const [rankingSortDesc, setRankingSortDesc] = useState(false)
   const [soccerSortBy, setSoccerSortBy] = useState<SoccerSortBy>('careerGoals')
@@ -263,10 +273,10 @@ function App() {
                 </button>
               </div>
               {rankingItems.map((item, idx) => (
-                <button
+                <Link
                   key={item.id}
-                  className="grid grid-cols-[2.5rem_1fr_3.5rem_3.5rem_4rem] sm:grid-cols-[3rem_1fr_5rem_5rem_5rem] gap-2 sm:gap-3 items-center py-2.5 sm:py-3.5 px-3 sm:px-5 text-xs sm:text-[0.95rem] text-left border-none rounded-lg bg-white text-slate-800 cursor-pointer transition-all shadow-sm hover:bg-slate-100 hover:shadow-md"
-                  onClick={() => setPageId(item.id)}
+                  to={getPagePath(item.id) || '/'}
+                  className="grid grid-cols-[2.5rem_1fr_3.5rem_3.5rem_4rem] sm:grid-cols-[3rem_1fr_5rem_5rem_5rem] gap-2 sm:gap-3 items-center py-2.5 sm:py-3.5 px-3 sm:px-5 text-xs sm:text-[0.95rem] text-left border-none rounded-lg bg-white text-slate-800 cursor-pointer transition-all shadow-sm hover:bg-slate-100 hover:shadow-md no-underline"
                 >
                   <span className="font-semibold text-sky-500">
                     {rankingSortBy === 'rank' ? item.marketSize : idx + 1}
@@ -278,7 +288,7 @@ function App() {
                   <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{formatPopulation(lang, item.populationNum)}</span>
                   <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{formatSpectator(lang, item.spectatorNum)}</span>
                   <span className="text-[0.65rem] sm:text-sm text-slate-500 truncate">{formatMarketSize(lang, item.marketSizeNum)}</span>
-                </button>
+                </Link>
               ))}
             </div>
           </div>
@@ -571,11 +581,6 @@ function App() {
       id === pageId ? 'bg-sky-100 text-sky-500' : ''
     }`
 
-  const handleSidebarItemClick = (id: string) => {
-    setPageId(id)
-    setSidebarOpen(false)
-  }
-
   const SidebarContent = () => (
     <>
       <div className="px-3 sm:px-5 pb-3 sm:pb-4 border-b border-slate-200 mb-3">
@@ -583,10 +588,11 @@ function App() {
       </div>
       <nav className="flex flex-col gap-0.5 px-2 sm:px-3 overflow-y-auto flex-1">
         {SIDEBAR_ITEMS.map((item) => (
-          <button
+          <Link
             key={item.id}
-            className={`${sidebarItemClass(item.id)} flex-none py-2.5 px-4 text-[0.9rem] w-full`}
-            onClick={() => handleSidebarItemClick(item.id)}
+            to={getPagePath(item.id) || '/'}
+            className={`${sidebarItemClass(item.id)} flex-none py-2.5 px-4 text-[0.9rem] w-full no-underline flex items-start gap-2`}
+            onClick={() => setSidebarOpen(false)}
           >
             {item.type === 'market_ranking' ? (
               <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-base font-normal rounded" title={t(lang, 'listTitle')}>≡</span>
@@ -608,7 +614,7 @@ function App() {
                 </span>
               )}
             </div>
-          </button>
+          </Link>
         ))}
       </nav>
       <footer className="pt-3 sm:pt-4 px-3 sm:px-5 border-t border-slate-200 text-[0.65rem] sm:text-xs text-slate-500 shrink-0">© TANAAKK</footer>
